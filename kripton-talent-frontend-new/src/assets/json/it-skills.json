@@ -1,0 +1,154 @@
+    [{
+            "skill": "Programming",
+            "sub_skills": [
+                "Java",
+                "Python",
+                "C++",
+                "JavaScript",
+                "SQL",
+                "Ruby",
+                "PHP",
+                "Swift"
+            ]
+        },
+        {
+            "skill": "Web Development",
+            "sub_skills": [
+                "HTML",
+                "CSS",
+                "JavaScript",
+                "jQuery",
+                "React",
+                "Angular",
+                "Node.js",
+                "Bootstrap"
+            ]
+        },
+        {
+            "skill": "Cloud Computing",
+            "sub_skills": [
+                "Amazon Web Services (AWS)",
+                "Microsoft Azure",
+                "Google Cloud Platform (GCP)",
+                "OpenStack",
+                "Docker",
+                "Kubernetes",
+                "Infrastructure as Code (IaC)"
+            ]
+        },
+        {
+            "skill": "Database Management",
+            "sub_skills": [
+                "Oracle",
+                "Microsoft SQL Server",
+                "MySQL",
+                "PostgreSQL",
+                "MongoDB",
+                "Data Modeling",
+                "SQL Optimization"
+            ]
+        },
+        {
+            "skill": "Cybersecurity",
+            "sub_skills": [
+                "Network Security",
+                "Encryption",
+                "Identity and Access Management (IAM)",
+                "Penetration Testing",
+                "Threat Detection and Response",
+                "Security Information and Event Management (SIEM)"
+            ]
+        },
+        {
+            "skill": "Data Analysis and Visualization",
+            "sub_skills": [
+                "Data Mining",
+                "Data Warehousing",
+                "Data Cleansing",
+                "Business Intelligence (BI)",
+                "Data Visualization Tools (e.g. Tableau, Power BI)",
+                "Statistics",
+                "Machine Learning"
+            ]
+        },
+        {
+            "skill": "Artificial Intelligence and Machine Learning",
+            "sub_skills": [
+                "Natural Language Processing (NLP)",
+                "Computer Vision",
+                "Deep Learning",
+                "Reinforcement Learning",
+                "Neural Networks",
+                "Decision Trees"
+            ]
+        },
+        {
+            "skill": "UI/UX Design",
+            "sub_skills": [
+                "Adobe Photoshop",
+                "Adobe Illustrator",
+                "Sketch",
+                "Figma",
+                "InVision",
+                "Zeplin",
+                "User Research",
+                "Usability Testing"
+            ]
+        },
+        {
+            "skill": "Technical Writing and Documentation",
+            "sub_skills": [
+                "Technical Writing",
+                "Documentation Management",
+                "API Documentation",
+                "User Guides",
+                "Online Help",
+                "Content Management Systems (CMS)"
+            ]
+        },
+        {
+            "skill": "Project Management",
+            "sub_skills": [
+                "Agile Project Management",
+                "Waterfall Project Management",
+                "Project Planning",
+                "Risk Management",
+                "Project Budgeting",
+                "Project Scheduling"
+            ]
+        },
+        {
+            "skill": "Problem-solving and Critical Thinking",
+            "sub_skills": [
+                "Logical Thinking", "Creative Thinking",
+                "Analytical Thinking",
+                "Problem Identification",
+                "Problem Analysis",
+                "Solution Design",
+                "Solution Implementation",
+                "Testing and Debugging"
+            ]
+        },
+        {
+            "skill": "Communication and Collaboration",
+            "sub_skills": [
+                "Verbal Communication",
+                "Written Communication",
+                "Presentation Skills",
+                "Active Listening",
+                "Teamwork",
+                "Collaboration Tools (e.g. Slack, Microsoft Teams, Zoom)"
+            ]
+        },
+        {
+            "skill": "Leadership and Management",
+            "sub_skills": [
+                "Team Management",
+                "Performance Management",
+                "Coaching and Mentoring",
+                "Conflict Resolution",
+                "Decision Making",
+                "Strategic Planning"
+            ]
+        }
+    ]

@@ -1,0 +1,168 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Detailed View"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row justify-content-center">
+  <div class="col-lg-12">
+    <div class="card-header border-bottom-dashed p-4">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <img
+              class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+              alt="user-profile-image"
+              [src]="
+                candidateDetail?.imagePath == null || undefined
+                  ? 'assets/images/users/user-dummy-img.jpg'
+                  : candidateDetail?.imagePath
+              "
+            />
+          </div>
+          <div class="col">
+            <h6 class="text-muted text-uppercase fw-semibold">Personal Info</h6>
+            <p class="text-muted mb-1">
+              {{ candidateDetail?.lastName + " " + candidateDetail?.firstName }}
+            </p>
+            <p class="text-muted mb-1">
+              {{ candidateDetail?.email }}
+            </p>
+            <p class="text-muted mb-1">
+              {{ candidateDetail?.designation }}
+            </p>
+
+            <p
+              class="text-muted mb-0"
+              id="zip-code"
+              *ngIf="candidateDetail?.status"
+            >
+              <span>Status:</span>
+              {{ candidateDetail?.status | lowercase }}
+            </p>
+            <p
+              class="text-muted mb-0"
+              id="zip-code"
+              *ngIf="candidateDetail?.decision"
+            >
+              <span>Decision:</span>
+              {{ candidateDetail?.decision | lowercase }}
+            </p>
+          </div>
+          <div class="col">
+            <h6>
+              <span class="text-muted fw-normal">Address : </span
+              ><span id="legal-register-no" class="link-primary">{{
+                candidateDetail?.country
+              }}</span>
+            </h6>
+            <h6>
+              <span class="text-muted fw-normal">Zip code : </span
+              ><span class="link-primary" id="email">{{
+                candidateDetail?.zipCode
+              }}</span>
+            </h6>
+
+            <h6>
+              <span class="text-muted fw-normal">Contact No: </span
+              ><span id="contact-no" class="link-primary">
+                +{{ candidateDetail?.phone }}</span
+              >
+            </h6>
+            <span class="text-muted fw-normal">Skills : </span>
+            <span
+              *ngFor="let skill of candidateDetail?.skills"
+              class="badge badge-gradient-info m-1"
+              >{{ skill }}</span
+            >
+          </div>
+          <div class="col">
+            <h6 class="text-muted fw-semibold">Description</h6>
+            <div class="alert alert-dark">
+              <p class="text-muted mb-1">
+                {{ candidateDetail?.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--end card-header-->
+  </div>
+
+  <!--end col-->
+
+  <div class="col-lg-12">
+    <div class="card-body p-4 border-top border-top-dashed">
+      <ul class="row mb-2" *ngIf="candidateDetail?.educations">
+        <h6 class="text-muted text-uppercase fw-semibold">Educations</h6>
+        <li
+          class="col-6"
+          *ngFor="let edu of candidateDetail?.educations; let i = index"
+        >
+          <p class="fw-medium mb-2" id="billing-name">
+            School/University name : {{ edu?.university }}
+          </p>
+          <p class="text-muted mb-1">Degree : {{ edu?.degree | lowercase }}</p>
+        </li>
+        <!--end col-->
+      </ul>
+      <!--end row-->
+      <hr />
+      <ul class="row mb-2" *ngIf="candidateDetail?.certifications">
+        <h6 class="text-muted text-uppercase fw-semibold">Certifications</h6>
+        <li
+          class="col-6"
+          *ngFor="let cert of candidateDetail?.certifications; let i = index"
+        >
+          <p class="fw-medium mb-2" id="billing-name">
+            Name : {{ cert?.name }}
+          </p>
+          <p class="text-muted mb-1">
+            Certification date :
+            {{ cert?.certDate | date : "dd , MMM YYYY" }}
+          </p>
+        </li>
+        <!--end col-->
+      </ul>
+      <!--end row-->
+      <hr />
+      <ul class="row mb-2" *ngIf="candidateDetail?.experiences">
+        <h6 class="text-muted text-uppercase fw-semibold">Experiences</h6>
+        <li
+          class="col-6"
+          *ngFor="let exp of candidateDetail?.experiences; let i = index"
+        >
+          <p class="fw-medium mb-2" id="billing-name">
+            Title : {{ exp?.title }}
+          </p>
+          <p class="text-muted mb-1">
+            Company : {{ exp?.company | lowercase }}
+          </p>
+          <p *ngIf="exp.fromDate && exp?.toDate" class="text-muted mb-1">
+            from : {{ exp?.fromDate | date : "dd-MMMM-YYYY" }} , to :
+            {{ exp?.toDate | date : "dd-MMMM-YYYY" }}
+          </p>
+          <p class="text-muted mb-1">Description : {{ exp?.description }}</p>
+        </li>
+        <!--end col-->
+      </ul>
+      <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+        <button
+          class="btn btn-primary"
+          (click)="generatePdf(candidateDetail?.id)"
+        >
+          <i class="ri-download-2-line align-bottom me-1"></i>Print
+        </button>
+        <a class="btn btn-outline-primary ms-2" routerLink="/ems/candidates">
+          <i class="ri-arrow-right-line align-bottom ms-1"></i
+            >Back
+        </a>
+      </div>
+    </div>
+    <!--end card-body-->
+  </div>
+  <!--end col-->
+</div>

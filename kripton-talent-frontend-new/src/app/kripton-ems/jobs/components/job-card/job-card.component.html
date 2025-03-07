@@ -1,0 +1,353 @@
+<div class="card-body">
+  <div class="d-flex mb-4">
+    <div class="avatar-sm">
+      <div class="avatar-title bg-light rounded">
+        <img
+          [src]="
+            job?.imagePath == null || undefined || job?.imagePath == ''
+              ? 'assets/images/users/multi-user.jpg'
+              : job.imagePath
+          "
+          alt=""
+          class="avatar-xxs companyLogo-img"
+          style="max-width: 100%; max-height: 100%"
+        />
+      </div>
+    </div>
+    <div class="ms-3 flex-grow-1">
+      <a href="javascript:void(0);" [routerLink]="['overview', job.id]">
+        <h5 class="job-title text-capitalize">{{ job.title }}</h5>
+      </a>
+      <p class="company-name text-muted mb-0 text-capitalize">
+        {{ job.company }}
+      </p>
+    </div>
+    <div>
+      <div class="dropdown card-header-dropdown" ngbDropdown>
+        <a
+          class="text-reset dropdown-btn arrow-none"
+          href="javascript:void(0);"
+          data-bs-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          ngbDropdownToggle
+        >
+          <span class="text-muted"
+            ><i class="ri-settings-4-line align-middle me-1 fs-15"></i
+            >settings</span
+          >
+        </a>
+        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+          <a
+            class="dropdown-item"
+            href="javascript:void(0);"
+            data-bs-toggle="modal"
+            id="update-btn"
+            data-bs-target="#showModal"
+            (click)="openModalExtraLarge(updateJobModal)"
+            >Edit</a
+          >
+          <a
+            class="dropdown-item"
+            href="javascript:void(0);"
+            (click)="deleteJob(job)"
+            >Remove</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <span
+      *ngFor="let tag of job.requiredSkills"
+      class="badge badge-soft-primary me-1"
+      >{{ tag }}</span
+    >
+  </div>
+  <div class="mt-2" style="max-width: 85%">
+    <p class="text-truncate text-muted me-1">{{ job?.description }}</p>
+  </div>
+</div>
+<div class="card-footer border-top-dashed">
+  <div
+    class="d-flex justify-content-between align-items-center flex-wrap gap-3"
+  >
+    <div>
+      <i class="ri-briefcase-2-line align-bottom me-1"></i>
+      <span class="job-type text-capitalize">
+        {{ job.employmentType | lowercase }}</span
+      >
+    </div>
+    <div>
+      <span class="job-experience text-capitalize">{{
+        job.experienceLevel | lowercase
+      }}</span>
+    </div>
+    <div>
+      <i class="ri-map-pin-2-line align-bottom me-1"></i>
+      <span class="job-location text-capitalize"> {{ job.location }}</span>
+    </div>
+    <div>
+      <i class="ri-pin align-bottom me-1"></i>
+      {{ job.status | lowercase }}
+    </div>
+    <div>
+      <i class="ri-time-line align-bottom me-1"></i>
+      <span class="job-postdate"> {{ job.createdAt | date : "fullDate" }}</span>
+    </div>
+    <div>
+      <a
+        href="javascript:void(0);"
+        class="btn btn-primary viewjob-list"
+        (click)="selectJobToBeViewed(job)"
+        >View More <i class="ri-arrow-right-line align-bottom ms-1"></i
+      ></a>
+    </div>
+  </div>
+</div>
+<!-- MODALS -->
+
+<!-- update Job modal -->
+<ng-template #updateJobModal role="document" let-modal>
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="exampleModalLabel">Update Job</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form (ngSubmit)="updateJob()" [formGroup]="jobForm">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="text-center mb-5">
+          <div
+            class="profile-user position-relative d-inline-block mx-auto mb-2"
+          >
+            <img
+              [src]="
+                job?.imagePath == null || undefined || job?.imagePath == ''
+                  ? 'assets/images/users/multi-user.jpg'
+                  : job.imagePath
+              "
+              class="rounded-circle avatar-lg img-thumbnail user-profile-image"
+              alt="user-profile-image"
+            />
+
+            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+              <input
+                id="profile-img-file-input"
+                type="file"
+                class="profile-img-file-input"
+                accept="image/png, image/jpeg"
+                accept="image/x-png,image/gif,image/jpeg"
+                [multiple]="false"
+                (change)="onImageUpdateChange($event)"
+              />
+              <label
+                for="profile-img-file-input"
+                class="profile-photo-edit avatar-xs"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+          <h5 class="fs-15">Add Image</h5>
+        </div>
+        <div class="col-md-4">
+          <label for="title-field" class="form-label">Job Title</label>
+          <input
+            type="text"
+            id="title-field"
+            class="form-control"
+            placeholder="Enter Title"
+            required
+            formControlName="title"
+            [ngClass]="{
+              'is-invalid':
+                form['title'].touched ||
+                (form['title'].dirty && !form['title'].valid)
+            }"
+            [ngClass]="{
+              'is-valid': form['title'].touched && form['title'].valid
+            }"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="company-field" class="form-label">Company</label>
+          <input
+            type="text"
+            id="company-field"
+            class="form-control"
+            placeholder="Enter Company name"
+            formControlName="company"
+            [ngClass]="{
+              'is-invalid':
+                form['company'].touched ||
+                (form['company'].dirty && !form['company'].valid)
+            }"
+            [ngClass]="{
+              'is-valid': form['company'].touched && form['company'].valid
+            }"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="date-field" class="form-label">Starting Date</label>
+          <input
+            class="form-control flatpickr-input"
+            type="text"
+            formControlName="startDate"
+            mwlFlatpickr
+            [altInput]="true"
+            [convertModelValue]="true"
+          />
+        </div>
+      </div>
+      <div class="row gy-4">
+        <div class="col-lg-12 col-md-12">
+          <div class="mb-3">
+            <label for="degree" class="form-label">Required Skills</label>
+            <ng-select
+              formControlName="requiredSkills"
+              [multiple]="true"
+              [(ngModel)]="job.requiredSkills"
+              [items]="skillSet"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row gy-4 mb-3">
+        <div class="col-md-4">
+          <div>
+            <label for="location-field" class="form-label">Location</label>
+            <ng-select
+              formControlName="location"
+              [multiple]="false"
+              placeholder="select country"
+              [(ngModel)]="job.location"
+              [items]="countries"
+              bindLabel="name"
+              bindValue="name"
+              id="location-field"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="employmentType-field" class="form-label"
+              >Employment Type</label
+            >
+            <ng-select
+              formControlName="employmentType"
+              [items]="employmentTypeValues"
+              [multiple]="false"
+              bindLabel="label"
+              bindValue="value"
+            ></ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="proposedSalary-field" class="form-label"
+              >Proposed Salary</label
+            >
+            <div class="form-icon">
+              <input
+                type="number"
+                class="form-control form-control-icon"
+                [ngClass]="{
+                  'is-invalid':
+                    form['proposedSalary'].touched ||
+                    (form['proposedSalary'].dirty &&
+                      !form['proposedSalary'].valid)
+                }"
+                [ngClass]="{
+                  'is-valid':
+                    form['proposedSalary'].touched &&
+                    form['proposedSalary'].valid
+                }"
+                name="proposedSalary-field"
+                id="proposedSalary-field"
+                formControlName="proposedSalary"
+              />
+              <i class="las la-dollar-sign"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row gy-4 mb-3">
+        <div class="col-md-6">
+          <label for="status-field" class="form-label"
+            >Current Job Status</label
+          >
+          <ng-select
+            formControlName="status"
+            [items]="statusValues"
+            [multiple]="false"
+            bindLabel="label"
+            bindValue="value"
+          ></ng-select>
+        </div>
+        <div class="col-md-6">
+          <label for="experienceLevel" class="form-label"
+            >Required Experience Level</label
+          >
+          <ng-select
+            formControlName="experienceLevel"
+            [items]="experienceLevelValues"
+            [multiple]="false"
+            bindLabel="label"
+            bindValue="value"
+          ></ng-select>
+        </div>
+      </div>
+      <div class="row gy-4 mb-3">
+        <div class="col-lg-12">
+          <div class="mb-3">
+            <label for="experienceDescription" class="form-label"
+              >Description</label
+            >
+            <textarea
+              formControlName="description"
+              class="form-control"
+              id="experienceDescription"
+              rows="3"
+              placeholder="Enter description"
+            >
+  You always want to make sure that your fonts work well together and try to limit the number of fonts you use to three or less. Experiment and play around with the fonts that you already have in the software you're working with reputable font websites. </textarea
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          Close
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!jobForm.valid"
+          id="update-btn"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

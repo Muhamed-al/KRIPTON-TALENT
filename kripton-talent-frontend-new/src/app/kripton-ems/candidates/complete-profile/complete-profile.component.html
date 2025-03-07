@@ -1,0 +1,862 @@
+<app-breadcrumbs
+  title="Edit Candidate"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="row">
+  <div class="col-xxl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <div
+            class="profile-user position-relative d-inline-block mx-auto mb-2"
+          >
+            <img
+              [src]="
+                imagePreview == null || undefined
+                  ? 'assets/images/users/user-dummy-img.jpg'
+                  : imagePreview
+              "
+              class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+              alt="user-profile-image"
+            />
+            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+              <input
+                id="profile-img-file-input"
+                type="file"
+                class="profile-img-file-input"
+                accept="image/png, image/jpeg"
+                accept="image/x-png,image/gif,image/jpeg"
+                [multiple]="false"
+                (change)="onImageChange($event)"
+              />
+              <label
+                for="profile-img-file-input"
+                class="profile-photo-edit avatar-xs"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end card-->
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-5">
+          <div class="flex-grow-1">
+            <h5 class="card-title mb-0">Profile Completion</h5>
+          </div>
+        </div>
+        <div class="progress animated-progess custom-progress progress-label">
+          <div
+            class="progress-bar bg-info"
+            role="progressbar"
+            [style]="'width:' + progressBarValue + '%'"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <div class="label">{{ progressBarValue }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-xxl-9">
+    <div class="card">
+      <div class="card-header">
+        <ul
+          ngbNav
+          #customNav="ngbNav"
+          [activeId]="1"
+          class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0"
+          role="tablist"
+        >
+          <li [ngbNavItem]="1" class="nav-item">
+            <a
+              ngbNavLink
+              class="nav-link"
+              data-bs-toggle="tab"
+              role="tab"
+              #personalDetailsStep
+            >
+              Personal Details
+            </a>
+            <ng-template ngbNavContent>
+              <form [formGroup]="candidateForm" (ngSubmit)="saveCandidate()">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="firstnameInput" class="form-label"
+                        >First Name</label
+                      >
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="firstnameInput"
+                          placeholder="Provide us with first name"
+                          required
+                          formControlName="firstName"
+                          [ngClass]="{
+                            'is-invalid':
+                              getCandidateForm['firstName'].touched ||
+                              (getCandidateForm['firstName'].dirty &&
+                                !getCandidateForm['firstName'].valid)
+                          }"
+                          [ngClass]="{
+                            'is-valid':
+                              getCandidateForm['firstName'].touched &&
+                              getCandidateForm['firstName'].valid
+                          }"
+                        />
+                        <i class="las la-address-book input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="lastnameInput" class="form-label"
+                        >Last Name</label
+                      >
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="lastnameInput"
+                          placeholder="Provide us with last name"
+                          required
+                          formControlName="lastName"
+                          [ngClass]="{
+                            'is-invalid':
+                              getCandidateForm['lastName'].touched ||
+                              (getCandidateForm['lastName'].dirty &&
+                                !getCandidateForm['lastName'].valid)
+                          }"
+                          [ngClass]="{
+                            'is-valid':
+                              getCandidateForm['lastName'].touched &&
+                              getCandidateForm['lastName'].valid
+                          }"
+                        />
+                        <i class="las la-address-book input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="phonenumberInput" class="form-label"
+                        >Phone Number</label
+                      >
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="phonenumberInput"
+                          formControlName="phone"
+                          [ngClass]="{
+                            'is-invalid':
+                              getCandidateForm['phone'].touched ||
+                              (getCandidateForm['phone'].dirty &&
+                                !getCandidateForm['phone'].valid)
+                          }"
+                          [ngClass]="{
+                            'is-valid':
+                              getCandidateForm['phone'].touched &&
+                              getCandidateForm['phone'].valid
+                          }"
+                        />
+                        <i class="las la-phone-volume input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="emailInput" class="form-label"
+                        >Email Address</label
+                      >
+                      <div class="input-group">
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="emailInput"
+                          placeholder="Provide us with email"
+                          value="daveadame@kripton.com"
+                          formControlName="email"
+                          [ngClass]="{
+                            'is-invalid':
+                              getCandidateForm['email'].dirty &&
+                              !getCandidateForm['email'].valid
+                          }"
+                          [ngClass]="{
+                            'is-valid':
+                              getCandidateForm['email'].touched &&
+                              getCandidateForm['email'].valid
+                          }"
+                        />
+                        <i class="ri-mail-unread-line input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--end col-->
+                  <div class="col-lg-8">
+                    <div class="mb-3">
+                      <label for="skillsInput" class="form-label">Skills</label>
+                      <ng-select
+                        [items]="skillSet"
+                        formControlName="skills"
+                        [multiple]="true"
+                        [(ngModel)]="selectedSkills"
+                      >
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="mb-3 g-1">
+                      <label class="form-label" for="newSkill">new skill</label>
+                      <button
+                        id="newSkill"
+                        type="button"
+                        class="btn btn-outline-primary border-bottom-double btn-label right input-group"
+                        data-bs-toggle="modal"
+                        data-bs-target="#varyingcontentModal"
+                        data-bs-whatever="Mary"
+                        (click)="openSkillModal(skillModal)"
+                      >
+                        <i class="las la-user-plus label-icon align-middle"></i>
+                        New
+                      </button>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="designationInput" class="form-label"
+                        >Designation</label
+                      >
+                      <ng-select
+                        placeholder="Java Developer / Technical Manager"
+                        formControlName="designation"
+                        [multiple]="false"
+                        [items]="jobTitles"
+                        id="designationInput"
+                      >
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <!--end col-->
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="countryInput" class="form-label"
+                        >Country</label
+                      >
+                      <ng-select
+                        formControlName="country"
+                        [multiple]="false"
+                        placeholder="select country"
+                        [items]="countries"
+                        bindLabel="name"
+                        bindValue="name"
+                        id="countryInput"
+                      >
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-lg-3">
+                    <div class="mb-3">
+                      <label for="cityInput" class="form-label">City</label>
+                      <div class="input-group">
+                        <input
+                          formControlName="city"
+                          type="text"
+                          class="form-control"
+                          id="cityInput"
+                          placeholder="Enter your city name ..."
+                        />
+                        <i class="bx bx-current-location input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3">
+                    <div class="mb-3">
+                      <label for="zipcodeInput" class="form-label"
+                        >Zip Code</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        formControlName="zipCode"
+                        id="zipcodeInput"
+                        placeholder="Enter zipcode"
+                      />
+                    </div>
+                  </div>
+                  <!--end col-->
+
+                  <!--end col-->
+
+                  <!--end col-->
+                  <div class="col-lg-12">
+                    <div class="mb-3 pb-2">
+                      <label for="exampleFormControlTextarea" class="form-label"
+                        >Description</label
+                      >
+                      <textarea
+                        formControlName="description"
+                        class="form-control"
+                        id="exampleFormControlTextarea"
+                        placeholder="Enter your description"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-12">
+                    <div class="hstack gap-2 justify-content-end">
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        [disabled]="!candidateForm.valid"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  <!--end col-->
+                </div>
+                <!--end row-->
+              </form>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2" class="nav-item">
+            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+              Education
+            </a>
+            <ng-template ngbNavContent>
+              <form [formGroup]="educationForm">
+                <div class="row g-2">
+                  <div class="col-lg-7">
+                    <div>
+                      <label for="university" class="form-label"
+                        >University / School</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="university"
+                        id="university"
+                        placeholder="University / School name"
+                        [ngClass]="{
+                          'is-invalid':
+                            (getExperienceForm['university']?.touched ||
+                              getExperienceForm['university']?.dirty) &&
+                            !getExperienceForm['university']?.valid
+                        }"
+                        [ngClass]="{
+                          'is-valid': getExperienceForm['university']?.valid
+                        }"
+                      />
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-4">
+                    <div>
+                      <label for="degree" class="form-label">Degree</label>
+                      <ng-select
+                        formControlName="degree"
+                        [multiple]="false"
+                        [items]="typesOfDegrees"
+                        bindLabel="label"
+                        bindValue="value"
+                      >
+                      </ng-select>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-6">
+                    <div>
+                      <label for="date-field" class="form-label">From</label>
+                      <div class="input-group">
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="fromDate"
+                          mwlFlatpickr
+                          [altInput]="true"
+                          [convertModelValue]="true"
+                        /><i class="las la-calendar input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="date-field" class="form-label">To</label>
+                      <div class="input-group">
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="toDate"
+                          mwlFlatpickr
+                          [altInput]="true"
+                          [convertModelValue]="true"
+                        />
+                        <i class="las la-calendar input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-12 mb-2">
+                    <button
+                      [disabled]="!educationForm.valid"
+                      (click)="addEducation()"
+                      class="btn btn-primary"
+                    >
+                      Add Education
+                    </button>
+                  </div>
+                </div>
+                <!--end row-->
+              </form>
+
+              <!-- here -->
+              <!-- skill card here !!!! -->
+              <div class="mt-4 mb-3 border-bottom pb-2">
+                <div class="float-end">
+                  <a
+                    href="javascript:void(0);"
+                    (click)="deleteAllEducation()"
+                    class="link-primary"
+                    >Delete All</a
+                  >
+                </div>
+                <h5 class="card-title">Saved Education ..</h5>
+                <span
+                  class="badge badge-gradient-transparent text-muted"
+                  [innerText]="educationArray.length"
+                ></span>
+              </div>
+              <div
+                class="list-group-item d-flex justify-content-between lh-sm mb-2"
+                *ngFor="let edu of educationArray; let i = index"
+              >
+                <div>
+                  <h6 class="row ms-2">
+                    {{ edu.university | lowercase }}
+                  </h6>
+                </div>
+                <div class="row text-muted">
+                  {{ edu.fromDate | date : "dd MMM yyyy" }}
+                </div>
+                <div class="row text-muted">
+                  {{ edu.toDate | date : "dd MMM yyyy" }}
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="dropdown card-header-dropdown" ngbDropdown>
+                    <a
+                      class="text-reset dropdown-btn arrow-none"
+                      href="javascript:void(0);"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      ngbDropdownToggle
+                      placement="top-right"
+                    >
+                      <span class="text-muted fs-18"
+                        ><i class="mdi mdi-dots-vertical"></i
+                      ></span>
+                    </a>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                      <button
+                        class="dropdown-item"
+                        (click)="editEducation(edu, i)"
+                      >
+                        Edit
+                        <i class="las la-wrench"></i>
+                      </button>
+                      <button
+                        class="dropdown-item"
+                        (click)="deleteEducation(i)"
+                      >
+                        Delete
+                        <i class="las la-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="3" class="nav-item">
+            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+              Experience
+            </a>
+            <ng-template ngbNavContent>
+              <form [formGroup]="experienceForm">
+                <div id="newlink">
+                  <div id="1">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="mb-3">
+                          <label for="title" class="form-label"
+                            >Job Title</label
+                          >
+                          <ng-select
+                            formControlName="title"
+                            [multiple]="false"
+                            [items]="jobTitles"
+                            id="title"
+                          >
+                          </ng-select>
+                        </div>
+                      </div>
+                      <!--end col-->
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="companyName" class="form-label"
+                            >Company Name</label
+                          >
+                          <input
+                            formControlName="company"
+                            type="text"
+                            class="form-control"
+                            id="companyName"
+                            placeholder="Company name"
+                            value="Microsoft"
+                            required
+                            [ngClass]="{
+                              'is-invalid':
+                                (getExperienceForm['company'].touched ||
+                                  getExperienceForm['company'].dirty) &&
+                                !getExperienceForm['company'].valid
+                            }"
+                            [ngClass]="{
+                              'is-valid': getExperienceForm['company'].valid
+                            }"
+                          />
+                        </div>
+                      </div>
+                      <!--end col-->
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="date-field" class="form-label"
+                            >From</label
+                          >
+                          <div class="input-group">
+                            <input
+                              class="form-control flatpickr-input"
+                              type="text"
+                              formControlName="fromDate"
+                              mwlFlatpickr
+                              [altInput]="true"
+                              [convertModelValue]="true"
+                            />
+                            <i class="las la-calendar input-group-text"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <!--end col-->
+
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="experienceDesc" class="form-label"
+                            >Description</label
+                          >
+                          <textarea
+                            formControlName="description"
+                            class="form-control"
+                            id="experienceDesc"
+                            rows="2"
+                            placeholder="Enter description"
+                          >
+                          </textarea>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="date-field" class="form-label">To</label>
+                          <div class="input-group">
+                            <input
+                              class="form-control flatpickr-input"
+                              type="text"
+                              formControlName="toDate"
+                              mwlFlatpickr
+                              [altInput]="true"
+                              [convertModelValue]="true"
+                            />
+                            <i class="las la-calendar input-group-text"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end row-->
+                  </div>
+                </div>
+                <div id="newForm" style="display: none"></div>
+                <div class="col-lg-12">
+                  <div class="hstack gap-2">
+                    <button
+                      [disabled]="!experienceForm.valid"
+                      (click)="addExperience()"
+                      class="btn btn-primary"
+                    >
+                      Add new Experience
+                    </button>
+                  </div>
+                </div>
+                <!--end col-->
+              </form>
+              <div class="mt-4 mb-3 border-bottom pb-2">
+                <div class="float-end">
+                  <a
+                    href="javascript:void(0);"
+                    (click)="deleteAllExperience()"
+                    class="link-primary"
+                    >Delete All</a
+                  >
+                </div>
+                <h5 class="card-title">Saved Experiences ..</h5>
+                <span
+                  class="badge badge-gradient-transparent text-muted"
+                  [innerText]="experienceArray.length"
+                ></span>
+              </div>
+              <div
+                class="list-group-item d-flex justify-content-between lh-sm mb-2"
+                *ngFor="let exp of experienceArray; let i = index"
+              >
+                <div>
+                  <h6 class="row ms-2">
+                    {{ exp.company }}
+                  </h6>
+                </div>
+                <div class="row">
+                  <div class="col-6 text-muted">
+                    {{ exp.fromDate | date : "dd MMM yyyy" }}
+                  </div>
+                  <div class="col-6 text-muted">
+                    {{ exp.toDate | date : "dd MMM yyyy" }}
+                  </div>
+                </div>
+                <div class="row">
+                  <p class="text-muted mb-1">{{ exp.description }}</p>
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="dropdown card-header-dropdown" ngbDropdown>
+                    <a
+                      class="text-reset dropdown-btn arrow-none"
+                      href="javascript:void(0);"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      ngbDropdownToggle
+                      placement="top-right"
+                    >
+                      <span class="text-muted fs-18"
+                        ><i class="mdi mdi-dots-vertical"></i
+                      ></span>
+                    </a>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                      <button
+                        class="dropdown-item"
+                        (click)="editExperience(exp, i)"
+                      >
+                        Edit
+                        <i class="las la-wrench"></i>
+                      </button>
+                      <button
+                        class="dropdown-item"
+                        (click)="deleteExperience(i)"
+                      >
+                        Delete
+                        <i class="las la-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="4" class="nav-item">
+            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+              Certifications
+            </a>
+            <ng-template ngbNavContent>
+              <form novalidate [formGroup]="certificationForm">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="name" class="form-label"
+                        >Certification Name</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="name"
+                        id="name"
+                        placeholder="Cert Name"
+                        [ngClass]="{
+                          'is-invalid':
+                            (getCertificationForm['name'].touched ||
+                              getCertificationForm['name'].dirty) &&
+                            !getCertificationForm['name'].valid
+                        }"
+                        [ngClass]="{
+                          'is-valid': getCertificationForm['name'].valid
+                        }"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="certDate" class="form-label"
+                        >Certification Date</label
+                      >
+                      <div class="input-group">
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="certDate"
+                          mwlFlatpickr
+                          [altInput]="true"
+                          [convertModelValue]="true"
+                        />
+                        <i class="las la-calendar input-group-text"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12 mb-2">
+                    <button
+                      [disabled]="!certificationForm.valid"
+                      (click)="addCertification()"
+                      class="btn btn-primary"
+                    >
+                      Add Certification
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <div class="mt-4 mb-3 border-bottom pb-2">
+                <div class="float-end">
+                  <a
+                    href="javascript:void(0);"
+                    (click)="deleteAllCerts()"
+                    class="link-primary"
+                    >Delete All</a
+                  >
+                </div>
+                <h5 class="card-title">Saved Certifications ..</h5>
+                <span
+                  class="badge badge-gradient-transparent text-muted"
+                  [innerText]="certificationArray.length"
+                ></span>
+              </div>
+              <div
+                class="list-group-item d-flex justify-content-between lh-sm mb-2"
+                *ngFor="let cert of certificationArray; let i = index"
+              >
+                <div>
+                  <h6 class="row ms-2">
+                    {{ cert.name | lowercase }}
+                  </h6>
+                </div>
+                <div class="row">
+                  {{ cert.certDate | date : "fullDate" }}
+                </div>
+                <div class="flex-shrink-0">
+                  <div
+                    class="dropdown card-header-dropdown"
+                    ngbDropdown
+                    placement="top-right"
+                  >
+                    <a
+                      class="text-reset dropdown-btn arrow-none"
+                      href="javascript:void(0);"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="true"
+                      ngbDropdownToggle
+                    >
+                      <span class="text-muted fs-18"
+                        ><i class="mdi mdi-dots-vertical"></i
+                      ></span>
+                    </a>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                      <button
+                        class="dropdown-item"
+                        (click)="editCertification(cert, i)"
+                      >
+                        Edit
+                        <i class="las la-wrench"></i>
+                      </button>
+                      <button
+                        class="dropdown-item"
+                        (click)="deleteCertification(i)"
+                      >
+                        Delete
+                        <i class="las la-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body p-4">
+        <div class="tab-content">
+          <div [ngbNavOutlet]="customNav"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<ng-template #skillModal role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="varyingcontentModalLabel">New Skill</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-hidden="true"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="skillForm">
+      <div class="mb-3">
+        <label for="skill-name" class="col-form-label">Skill Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="skill-name"
+          placeholder="Rust .."
+          formControlName="title"
+        />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Back
+    </button>
+    <button (click)="saveSkill()" class="btn btn-primary">Save</button>
+  </div>
+</ng-template>

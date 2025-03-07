@@ -1,0 +1,18 @@
+https://login.microsoftonline.com/889cdbee-d881-42dc-bd06-ad3237c34a53/oauth2/v2.0/token
+
+
+Calendars.Read
+Calendars.ReadWrite 
+OnlineMeetings.ReadWrite
+People.Read.All
+User.Read
+User.Read.All
+
+
+maven install
+docker build
+
+
+C:\Program Files\Java\jdk-11.0.14\bin
+C:\Program Files\Java\jdk1.8.0_31\bin
+C:\Program Files\Java\jdk1.7.0_80\bin

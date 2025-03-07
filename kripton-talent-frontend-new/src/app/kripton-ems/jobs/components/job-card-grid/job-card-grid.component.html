@@ -1,0 +1,505 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div class="avatar-sm mb-4">
+        <div class="avatar-title bg-light rounded">
+          <img
+            [src]="
+              job?.imagePath == null || undefined || job?.imagePath == ''
+                ? 'assets/images/users/multi-user.jpg'
+                : job.imagePath
+            "
+            alt=""
+            style="max-width: 100%; max-height: 100%"
+            class="avatar-xxs"
+          />
+        </div>
+      </div>
+      <div class="">
+        <div class="dropdown card-header-dropdown" ngbDropdown>
+          <a
+            class="text-reset dropdown-btn arrow-none"
+            href="javascript:void(0);"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ngbDropdownToggle
+          >
+            <span class="text-muted"
+              ><i class="ri-settings-4-line align-middle me-1 fs-15"></i
+              >settings</span
+            >
+          </a>
+          <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+            <a
+              class="dropdown-item"
+              href="javascript:void(0);"
+              data-bs-toggle="modal"
+              id="update-btn"
+              data-bs-target="#showModal"
+              (click)="openModalExtraLarge(updateJobModal)"
+              >Edit</a
+            >
+            <a
+              class="dropdown-item"
+              href="javascript:void(0);"
+              (click)="deleteJob(job)"
+              >Remove</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="javascript:void(0);" [routerLink]="['overview', job.id]">
+      <h5>{{ job.title }}</h5>
+    </a>
+    <p class="text-muted text-capitalize">{{ job.company }}</p>
+    <div class="d-flex gap-4 mb-3">
+      <div>
+        <i
+          class="ri-map-pin-2-line text-primary me-1 align-bottom text-capitalize text-truncate"
+        ></i>
+        {{ job.location }}
+      </div>
+      <div>
+        <i class="ri-time-line text-primary me-1 align-bottom"></i>
+        {{ job.startDate | date : "fullDate" }}
+      </div>
+    </div>
+    <p class="text-muted text-truncate">{{ job.description }}</p>
+    <div class="hstack gap-2">
+      <span class="badge badge-gradient-primary">{{ job.employmentType }}</span>
+    </div>
+    <div class="mt-4 hstack gap-2">
+      <a
+        href="javascript:void(0);"
+        class="btn btn-soft-primary w-100"
+        (click)="openModalExtraLarge(assignCandidates)"
+        (click)="getCandidates()"
+        >Assign</a
+      >
+      <a
+        [routerLink]="['/ems/jobs/overview', job.id]"
+        class="btn btn-soft-success w-100"
+        >Overview</a
+      >
+    </div>
+  </div>
+</div>
+<!-- MODALS -->
+
+<!-- update Job modal -->
+<ng-template #updateJobModal role="document" let-modal>
+  <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="exampleModalLabel">Update Job</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form (ngSubmit)="updateJob()" [formGroup]="jobForm">
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="text-center mb-5">
+          <div
+            class="profile-user position-relative d-inline-block mx-auto mb-2"
+          >
+            <img
+              [src]="
+                job?.imagePath == null || undefined || job?.imagePath == ''
+                  ? 'assets/images/users/multi-user.jpg'
+                  : job.imagePath
+              "
+              class="rounded-circle avatar-lg img-thumbnail user-profile-image"
+              alt="user-profile-image"
+            />
+
+            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+              <input
+                id="profile-img-file-input"
+                type="file"
+                class="profile-img-file-input"
+                accept="image/png, image/jpeg"
+                accept="image/x-png,image/gif,image/jpeg"
+                [multiple]="false"
+                (change)="onImageUpdateChange($event)"
+              />
+              <label
+                for="profile-img-file-input"
+                class="profile-photo-edit avatar-xs"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+          <h5 class="fs-15">Add Image</h5>
+        </div>
+        <div class="col-md-4">
+          <label for="title-field" class="form-label">Job Title</label>
+          <input
+            type="text"
+            id="title-field"
+            class="form-control"
+            placeholder="Enter Title"
+            required
+            formControlName="title"
+            [ngClass]="{
+              'is-invalid':
+                form['title'].touched ||
+                (form['title'].dirty && !form['title'].valid)
+            }"
+            [ngClass]="{
+              'is-valid': form['title'].touched && form['title'].valid
+            }"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="company-field" class="form-label">Company</label>
+          <input
+            type="text"
+            id="company-field"
+            class="form-control"
+            placeholder="Enter Company name"
+            formControlName="company"
+            [ngClass]="{
+              'is-invalid':
+                form['company'].touched ||
+                (form['company'].dirty && !form['company'].valid)
+            }"
+            [ngClass]="{
+              'is-valid': form['company'].touched && form['company'].valid
+            }"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="date-field" class="form-label">Starting Date</label>
+          <input
+            class="form-control flatpickr-input"
+            type="text"
+            formControlName="startDate"
+            mwlFlatpickr
+            [altInput]="true"
+            [convertModelValue]="true"
+          />
+        </div>
+      </div>
+      <div class="row gy-4">
+        <div class="col-lg-12 col-md-12">
+          <div class="mb-3">
+            <label for="degree" class="form-label">Required Skills</label>
+            <ng-select
+              formControlName="requiredSkills"
+              [multiple]="true"
+              [(ngModel)]="job.requiredSkills"
+              [items]="skillSet"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row gy-4 mb-3">
+        <div class="col-md-4">
+          <div>
+            <label for="location-field" class="form-label">Location</label>
+            <ng-select
+              formControlName="location"
+              [multiple]="false"
+              placeholder="select country"
+              [(ngModel)]="job.location"
+              [items]="countries"
+              bindLabel="name"
+              bindValue="name"
+              id="location-field"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="employmentType-field" class="form-label"
+              >Employment Type</label
+            >
+            <ng-select
+              formControlName="employmentType"
+              [items]="employmentTypeValues"
+              [multiple]="false"
+              bindLabel="label"
+              bindValue="value"
+            ></ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="proposedSalary-field" class="form-label"
+              >Proposed Salary</label
+            >
+            <div class="form-icon">
+              <input
+                type="number"
+                class="form-control form-control-icon"
+                [ngClass]="{
+                  'is-invalid':
+                    form['proposedSalary'].touched ||
+                    (form['proposedSalary'].dirty &&
+                      !form['proposedSalary'].valid)
+                }"
+                [ngClass]="{
+                  'is-valid':
+                    form['proposedSalary'].touched &&
+                    form['proposedSalary'].valid
+                }"
+                name="proposedSalary-field"
+                id="proposedSalary-field"
+                formControlName="proposedSalary"
+              />
+              <i class="las la-dollar-sign"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row gy-4 mb-3">
+        <div class="col-md-6">
+          <label for="status-field" class="form-label"
+            >Current Job Status</label
+          >
+          <ng-select
+            formControlName="status"
+            [items]="statusValues"
+            [multiple]="false"
+            bindLabel="label"
+            bindValue="value"
+          ></ng-select>
+        </div>
+        <div class="col-md-6">
+          <label for="experienceLevel" class="form-label"
+            >Required Experience Level</label
+          >
+          <ng-select
+            formControlName="experienceLevel"
+            [items]="experienceLevelValues"
+            [multiple]="false"
+            bindLabel="label"
+            bindValue="value"
+          ></ng-select>
+        </div>
+      </div>
+      <div class="row gy-4 mb-3">
+        <div class="col-lg-12">
+          <div class="mb-3">
+            <label for="experienceDescription" class="form-label"
+              >Description</label
+            >
+            <textarea
+              formControlName="description"
+              class="form-control"
+              id="experienceDescription"
+              rows="3"
+              placeholder="Enter description"
+            >
+  You always want to make sure that your fonts work well together and try to limit the number of fonts you use to three or less. Experiment and play around with the fonts that you already have in the software you're working with reputable font websites. </textarea
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          Close
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!jobForm.valid"
+          id="update-btn"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<ng-template #assignCandidates role="document" let-modal>
+  <div class="modal-header bg-soft-dark p-3">
+    <h5 class="modal-title" id="exampleModalLabel">
+      Assign Candidates to : <strong>{{ job.title }}</strong>
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Add, Edit & Remove</h4>
+      </div>
+      <div class="card-body">
+        <div id="pagination-list">
+          <div class="row g-4 mb-3">
+            <div class="col-sm-auto">
+              <div class="d-flex gap-1">
+                <a
+                  type="button"
+                  class="btn btn-success add-btn"
+                  [routerLink]="['/candidates/create']"
+                  (click)="modal.dismiss()"
+                >
+                  <i class="ri-add-line align-bottom me-1"></i>
+                </a>
+                <button
+                  class="btn btn-soft-danger"
+                  (click)="deleteMultipleCandidates()"
+                >
+                  <i class="ri-delete-bin-2-line"></i>
+                </button>
+                <button
+                  class="btn btn-soft-primary"
+                  (click)="assignMultipleCandidatesToJob()"
+                >
+                  <i class="bx bx-street-view"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-sm">
+              <div class="d-flex justify-content-sm-end">
+                <div class="search-box ms-2">
+                  <input
+                    type="text"
+                    class="form-control search"
+                    placeholder="Search..."
+                  />
+                  <i class="ri-search-line search-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div
+              class="table-responsive table-card mt-3 mb-1"
+              style="max-height: 15rem; overflow: auto; display: inline-block"
+            >
+              <table
+                class="table table-responsive mb-0"
+                *ngIf="listOfCandidates?.length; else loader"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [(ngModel)]="masterSelected"
+                          name="list_name"
+                          value="m1"
+                          (change)="checkUncheckAll()"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="activetableCheck"
+                        ></label>
+                      </div>
+                    </th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Candidate</th>
+                    <th scope="col">Revision</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Rating</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let candidate of listOfCandidates">
+                    <th scope="row">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [(ngModel)]="candidate.isSelected"
+                          name="list_name"
+                          value="{{ candidate.id }}"
+                          (change)="isAllSelected()"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="activetableCheck01"
+                        ></label>
+                      </div>
+                    </th>
+                    <td>#{{ candidate?.id }}</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                          <img
+                            [src]="
+                              candidate?.imagePath == null || undefined
+                                ? 'assets/images/users/user-dummy-img.jpg'
+                                : candidate?.imagePath
+                            "
+                            alt=""
+                            class="avatar-xxs rounded-circle image_src object-cover"
+                          />
+                        </div>
+                        <div class="flex-grow-1 ms-2 name">
+                          {{ candidate?.firstName + " " + candidate?.lastName }}
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        <span
+                          class="badge"
+                          [ngClass]="
+                            candidate?.completed === true
+                              ? ' badge-gradient-success'
+                              : ' badge-gradient-danger'
+                          "
+                          >{{
+                            candidate?.completed === true
+                              ? "completed"
+                              : "not completed"
+                          }}</span
+                        >
+                      </div>
+                    </td>
+                    <td>{{ candidate?.phone }}</td>
+                    <td>{{ candidate?.email }}</td>
+                    <td>{{ candidate?.rating }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+  </div>
+</ng-template>
+<ng-template #loader>
+  <div class="d-flex justify-content-center">
+    <div
+      class="spinner-border text-info m-5"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,42 @@
+<div class="row gy-2 mb-2" id="candidate-list">
+  <div
+    class="col-md-6 col-lg-12"
+    *ngFor="
+      let candidate of candidateList
+        | slice : (page - 1) * pageSize : page * pageSize;
+      let i = index
+    "
+  >
+    <app-candidate-list-card
+      [candidate]="candidate"
+      [index]="i"
+      (candidateEditedEvent)="updateListCandidates($event)"
+      (candidateDeletedEvent)="updateListCandidates($event)"
+    ></app-candidate-list-card>
+  </div>
+  <!-- pagination -->
+  <ngb-pagination
+    *ngIf="candidateList"
+    class="d-flex justify-content-end pt-2"
+    [collectionSize]="candidateList.length"
+    [(page)]="page"
+    [pageSize]="pageSize"
+    aria-label="Custom pagination"
+  >
+    <ng-template ngbPaginationPrevious let-page let-pages="pages">
+      <i class="ci-arrow-left me-2"></i>
+      Prev
+    </ng-template>
+    <ng-template ngbPaginationNext>
+      Next
+      <i class="ci-arrow-right ms-2"></i>
+    </ng-template>
+  </ngb-pagination>
+
+  <div id="elmLoader" *ngIf="!candidateList">
+    <div class="spinner-border text-primary avatar-sm" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

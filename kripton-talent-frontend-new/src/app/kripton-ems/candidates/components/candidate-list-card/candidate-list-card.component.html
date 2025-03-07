@@ -1,0 +1,717 @@
+<div class="card mb-2">
+  <div class="card-body">
+    <div class="d-lg-flex align-items-center">
+      <div class="flex-shrink-0">
+        <div class="avatar-sm rounded">
+          <img
+            [src]="
+              candidate?.imagePath == null || undefined
+                ? 'assets/images/users/user-dummy-img.jpg'
+                : candidate?.imagePath
+            "
+            alt=""
+            class="member-img img-fluid d-block rounded"
+            style="max-width: 100%; max-height: 100%"
+          />
+        </div>
+      </div>
+      <div class="ms-lg-3 my-3 my-lg-0">
+        <a [routerLink]="['candidate-overview', candidate.id]">
+          <h5 class="fs-16 mb-2">
+            {{ candidate.firstName + " " + candidate.lastName }}
+          </h5>
+        </a>
+        <p class="text-muted mb-0" *ngIf="candidate.designation != ''">
+          {{ candidate.designation }}
+        </p>
+      </div>
+      <div class="d-flex gap-4 mt-0 text-muted mx-auto">
+        <div>
+          <i class="ri-map-pin-2-line text-primary me-1 align-bottom"></i>
+          {{ candidate.country }}
+        </div>
+        <div>
+          <i class="ri-time-line text-primary me-1 align-bottom"></i>
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-soft-danger': candidate.status == 'RESUME_REVIEW',
+              'badge-soft-success': candidate.status == 'SCREENING',
+              'badge-soft-secondary': candidate.status == 'IN_PERSON_INTERVIEW',
+              'badge-soft-primary': candidate.status == 'OFFER'
+            }"
+            >{{ candidate.status | lowercase }}</span
+          >
+        </div>
+      </div>
+      <div
+        class="d-flex flex-wrap gap-2 align-items-center mx-auto my-3 my-lg-0"
+      >
+        <div class="badge text-bg-success">
+          <i class="mdi mdi-star me-1"></i>{{ candidate.rating }}
+        </div>
+        <div class="text-muted">{{ candidate.phone }}</div>
+      </div>
+      <div class="d-flex gap-1 mt-0">
+        <div class="flex-shrink-0">
+          <div class="dropdown card-header-dropdown" ngbDropdown>
+            <a
+              class="text-reset dropdown-btn arrow-none"
+              href="javascript:void(0);"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              ngbDropdownToggle
+            >
+              <span class="text-muted fs-18"
+                ><i class="mdi mdi-dots-vertical"></i
+              ></span>
+            </a>
+            <div
+              class="dropdown-menu dropdown-menu-end text-center"
+              ngbDropdownMenu
+            >
+              <button
+                class="btn btn-outline-primary m-1"
+                (click)="openModalLarge(toggleFirstModal)"
+                (click)="selectCandidateToBeEdited()"
+              >
+                <i class="bx bxs-pencil"></i>
+              </button>
+              <button
+                class="btn btn-outline-primary m-1"
+                (click)="openModalExtraLarge(assignCandidateToJobModal)"
+                (click)="getJobsNotAssignedToCandidate()"
+              >
+                <i class="bx bx-street-view"></i>
+              </button>
+              <button
+                class="btn btn-outline-primary m-1"
+                (click)="openModalLarge(findCandidateJobApplicationsModal)"
+                (click)="getCandidateJobApplications(candidate?.id)"
+              >
+                <i class="bx bx-file-find"></i>
+              </button>
+              <button
+                routerLink="/calendar"
+                class="btn btn-outline-primary m-1"
+              >
+                <i class="bx bx-calendar-plus"></i>
+              </button>
+              <button
+                class="btn btn-outline-primary m-1"
+                (click)="deleteCandidate(candidate)"
+              >
+                <i class="bx bx-trash"></i>
+              </button>
+              <button
+                *ngIf="!candidate.completed"
+                class="btn btn-soft-primary"
+                (click)="sendCompletionMail(candidate)"
+              >
+                <i class="bx bx-mail-send"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODALS -->
+
+<!-- First modal dialog -->
+<ng-template #toggleFirstModal let-modal>
+  <div class="modal-header bg-soft-dark p-3">
+    <h5 class="modal-title" id="exampleModalLabel">Candidate Details</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form [formGroup]="candidateForm">
+    <div class="mb-4 text-center mt-2">
+      <div>
+        <h5 class="mb-1">General Information</h5>
+        <p class="text-muted">Edit Candidate</p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row gy-4 mb-3">
+        <div class="text-center">
+          <div
+            class="profile-user position-relative d-inline-block mx-auto mb-2"
+          >
+            <img
+              [src]="
+                candidate?.imagePath == null || undefined
+                  ? 'assets/images/users/user-dummy-img.jpg'
+                  : candidate?.imagePath
+              "
+              class="rounded-circle avatar-lg img-thumbnail user-profile-image"
+              alt="user-profile-image"
+            />
+
+            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+              <input
+                id="profile-img-file-input"
+                type="file"
+                class="profile-img-file-input"
+                accept="image/png, image/jpeg"
+                accept="image/x-png,image/gif,image/jpeg"
+                [multiple]="false"
+                (change)="onImageUpdateChange($event)"
+              />
+              <label
+                for="profile-img-file-input"
+                class="profile-photo-edit avatar-xs"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+          <h5 class="fs-15">Change Image</h5>
+        </div>
+        <div class="col-md-6">
+          <label for="firstnameInput" class="form-label">First Name</label>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              id="firstnameInput"
+              placeholder="Provide us with first name"
+              required
+              formControlName="firstName"
+              [ngClass]="{
+                'is-invalid':
+                  form['firstName'].touched ||
+                  (form['firstName'].dirty && !form['firstName'].valid)
+              }"
+              [ngClass]="{
+                'is-valid': form['firstName'].touched && form['firstName'].valid
+              }"
+            />
+            <i class="las la-address-book input-group-text"></i>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="lastnameInput" class="form-label">Last Name</label>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              id="lastnameInput"
+              placeholder="Provide us with last name"
+              required
+              formControlName="lastName"
+              [ngClass]="{
+                'is-invalid':
+                  form['lastName'].touched ||
+                  (form['lastName'].dirty && !form['lastName'].valid)
+              }"
+              [ngClass]="{
+                'is-valid': form['lastName'].touched && form['lastName'].valid
+              }"
+            />
+            <i class="las la-address-book input-group-text"></i>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="emailInput" class="form-label">Email</label>
+
+          <div class="input-group">
+            <input
+              formControlName="email"
+              type="text"
+              class="form-control"
+              id="emailInput"
+              placeholder="Email"
+            />
+            <i class="bx bx-mail input-group-text"></i>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="designationInput" class="form-label">Designation</label>
+          <ng-select
+            placeholder="Java Developer / Technical Manager"
+            formControlName="designation"
+            [multiple]="false"
+            [items]="jobTitles"
+            id="designationInput"
+          >
+          </ng-select>
+        </div>
+      </div>
+      <div class="row gy-4 mb-3">
+        <div class="col-md-4">
+          <label for="phonenumberInput" class="form-label">Phone Number</label>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              id="phonenumberInput"
+              placeholder="(xxx) xx xxx xxx"
+              formControlName="phone"
+              mask="(+ 000) 000-000-00"
+              [ngClass]="{
+                'is-invalid':
+                  form['phone'].touched ||
+                  (form['phone'].dirty && !form['phone'].valid)
+              }"
+              [ngClass]="{
+                'is-valid': form['phone'].touched && form['phone'].valid
+              }"
+            />
+            <i class="las la-phone-volume input-group-text"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="countryInput" class="form-label">Country</label>
+          <ng-select
+            formControlName="country"
+            [multiple]="false"
+            placeholder="select country"
+            [items]="countries"
+            bindLabel="name"
+            bindValue="name"
+            id="countryInput"
+          >
+          </ng-select>
+        </div>
+        <div class="col-md-4">
+          <label for="cityInput" class="form-label">City</label>
+
+          <div class="input-group">
+            <input
+              formControlName="city"
+              type="text"
+              class="form-control"
+              id="cityInput"
+              placeholder="City"
+              value="California"
+            />
+            <i class="bx bx-current-location input-group-text"></i>
+          </div>
+        </div>
+      </div>
+      <div class="row gy-4 mb-3">
+        <div class="col-md-12">
+          <label for="candidateDescription" class="form-label"
+            >Description</label
+          >
+          <textarea
+            formControlName="description"
+            class="form-control"
+            id="candidateDescription"
+            rows="3"
+          >
+          </textarea>
+        </div>
+      </div>
+
+      <div class="row gy-4 mb-2">
+        <div class="col-md-3">
+          <button
+            type="button"
+            class="btn btn-soft-primary btn-label"
+            [disabled]="!candidateForm.valid"
+            (click)="saveEdit()"
+          >
+            <i class="las la-check label-icon align-middle fs-16 ms-2"></i>Save
+          </button>
+        </div>
+        <div class="col-md-4">
+          <button
+            class="btn btn-outline-danger waves-effect waves-light"
+            data-bs-target="#secondmodal"
+            data-bs-toggle="modal"
+            data-bs-dismiss="modal"
+            (click)="openModalLarge(toggleSecondModal)"
+            (click)="modal.close('Close click')"
+          >
+            more ..
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<!-- Second modal dialog -->
+<ng-template #toggleSecondModal let-modal>
+  <div class="modal-header bg-soft-dark p-3">
+    <h5 class="modal-title" id="exampleModalLabel">More Details</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body text-center">
+    <div class="mt-2">
+      <!-- Toogle to second dialog -->
+      <div class="mb-4 text-center">
+        <div>
+          <h5 class="mb-1">Process Information</h5>
+          <p class="text-muted">Edit Candidate</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="candidateForm">
+          <div class="row gy-4 mb-3">
+            <div class="col-md-6">
+              <label for="designationInput" class="form-label">Decision</label>
+
+              <ng-select
+                id="sourceOfHireInput"
+                formControlName="decision"
+                [multiple]="false"
+                [(ngModel)]="candidate.decision"
+                [items]="hiringDecisions"
+                bindValue="value"
+                bindLabel="label"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-6">
+              <label for="statusInput" class="form-label">Status</label>
+
+              <ng-select
+                id="statusInput"
+                formControlName="status"
+                [(ngModel)]="candidate.status"
+                [multiple]="false"
+                [items]="recruitingStatus"
+                bindValue="value"
+                bindLabel="label"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-12 text-center">
+              <label for="decisionInput" class="form-label">Skills</label>
+              <ng-select
+                id="decisionInput"
+                formControlName="skills"
+                [multiple]="true"
+                [(ngModel)]="candidate.skills"
+                [items]="skillSet"
+              >
+              </ng-select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="hstack gap-2 justify-content-center">
+        <button
+          class="btn btn-soft-danger"
+          data-bs-target="#firstmodal"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="openModalLarge(toggleFirstModal)"
+          (click)="modal.close('Close click')"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary btn-label"
+          [disabled]="!candidateForm.valid"
+          (click)="saveEdit()"
+        >
+          <i class="las la-check label-icon align-middle fs-16 ms-2"></i>Save
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #findCandidateJobApplicationsModal role="document" let-modal>
+  <div class="modal-header bg-soft-dark p-3">
+    <h5 class="modal-title" id="exampleModalLabel">Job applications</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Consult Applications</h4>
+      </div>
+      <div class="card-body">
+        <div id="pagination-list">
+          <div class="row g-4 mb-3">
+            <div class="col-sm">
+              <div class="d-flex justify-content-sm-end">
+                <div class="search-box ms-2">
+                  <input
+                    type="text"
+                    class="form-control search"
+                    placeholder="Search..."
+                  />
+                  <i class="ri-search-line search-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive table-card mt-3 mb-1">
+            <table
+              class="table table-nowrap mb-0"
+              *ngIf="listOfJobApplications?.length; else loader"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Job</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Phone</th>
+
+                  <th scope="col">Decision</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let jobApp of listOfJobApplications">
+                  <td>{{ jobApp?.id }}</td>
+                  <td>{{ jobApp?.job?.title }}</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0">
+                        <img
+                          [src]="
+                            jobApp?.job?.imagePath !== ''
+                              ? jobApp?.job?.imagePath
+                              : 'assets/images/users/user-dummy-img.jpg'
+                          "
+                          alt=""
+                          class="avatar-xxs rounded-circle image_src object-cover"
+                        />
+                      </div>
+                      <div class="flex-grow-1 ms-2 name">
+                        {{ jobApp?.job?.company }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ jobApp?.candidate?.phone }}</td>
+                  <td>
+                    <span
+                      [ngClass]="[
+                        jobApp?.candidate?.decision === 'HIRED'
+                          ? 'badge-gradient-primary'
+                          : '',
+                        jobApp?.candidate?.decision === 'NOT_HIRED'
+                          ? 'badge-gradient-danger'
+                          : '',
+                        jobApp?.candidate?.decision === 'WAIT_LIST'
+                          ? 'badge-gradient-secondary'
+                          : '',
+                        jobApp?.candidate?.decision === 'PENDING'
+                          ? 'badge-gradient-info'
+                          : '',
+                        jobApp?.candidate?.decision === 'PLACED'
+                          ? 'badge-gradient-success'
+                          : ''
+                      ]"
+                      class="badge"
+                      >{{ jobApp?.candidate?.decision | lowercase }}</span
+                    >
+                  </td>
+
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-danger mt-0 m-auto"
+                      (click)="deleteJobApplication(jobApp)"
+                    >
+                      <i class="las la-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+  </div>
+</ng-template>
+<ng-template #assignCandidateToJobModal role="document" let-modal>
+  <div class="modal-header bg-soft-dark p-3">
+    <h5 class="modal-title" id="exampleModalLabel">Assign Candidate to Jobs</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Assign To Job</h4>
+      </div>
+      <div class="card-body">
+        <div id="pagination-list">
+          <div class="row g-4 mb-3">
+            <div class="col-sm-auto">
+              <div class="d-flex gap-1">
+                <a
+                  type="button"
+                  class="btn btn-success add-btn"
+                  routerLink="/ems/jobs/create-job"
+                  (click)="modal.dismiss()"
+                >
+                  <i class="ri-add-line align-bottom me-1"></i>
+                </a>
+
+                <button
+                  class="btn btn-soft-primary"
+                  (click)="assignCandidateToMultipleJobs()"
+                >
+                  <i class="bx bx-street-view"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-sm">
+              <div class="d-flex justify-content-sm-end">
+                <div class="search-box ms-2">
+                  <input
+                    type="text"
+                    class="form-control search"
+                    placeholder="Search..."
+                  />
+                  <i class="ri-search-line search-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive table-card mt-3 mb-1">
+            <table
+              class="table table-nowrap table-responsive mb-0 table-striped"
+              *ngIf="listOfJobs?.length; else loader"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="masterSelected"
+                        name="list_name"
+                        value="m1"
+                        (change)="checkUncheckAll()"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="activetableCheck"
+                      ></label>
+                    </div>
+                  </th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Opportunity</th>
+                  <th scope="col">Validation</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Start Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let job of listOfJobs"
+                  [ngClass]="
+                    job?.candidateAssignedTo === true
+                      ? ' table-success'
+                      : ' table-warning'
+                  "
+                >
+                  <th scope="row ">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="job.isSelected"
+                        name="list_name"
+                        [disabled]="job?.candidateAssignedTo ? true : false"
+                        (change)="isAllSelected()"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="activetableCheck01"
+                      ></label>
+                    </div>
+                  </th>
+                  <td>#{{ job?.id }}</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0">
+                        <img
+                          [src]="
+                            job?.imagePath !== ''
+                              ? job?.imagePath
+                              : 'assets/images/users/user-dummy-img.jpg'
+                          "
+                          alt=""
+                          class="avatar-xxs rounded-circle image_src object-cover"
+                        />
+                      </div>
+                      <div class="flex-grow-1 ms-2 name">
+                        {{ job?.company }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    {{ job?.title }}
+                  </td>
+                  <td>
+                    <div>
+                      <span
+                        class="badge"
+                        [ngClass]="
+                          job?.isValidated === true
+                            ? ' bg-success'
+                            : ' bg-danger'
+                        "
+                        >{{
+                          job?.isValidated === true ? "valid" : "not valid"
+                        }}</span
+                      >
+                    </div>
+                  </td>
+                  <td>{{ job?.location }}</td>
+                  <td>{{ job?.startDate | date : "dd ,MMMM YYYY" }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+  </div>
+</ng-template>
+<ng-template #loader>
+  <div class="d-flex justify-content-center">
+    <div
+      class="spinner-border text-info m-5"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>

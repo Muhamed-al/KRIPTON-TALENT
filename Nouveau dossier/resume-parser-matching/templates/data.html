@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Data</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Phone</th>
+			<th>Score</th>
+      <th>Skills</th>
+			<th>Action</th>
+		</tr>
+		{% for item in text %}
+		<tr>
+			<td>{{ item['name'] }}</td>
+			<td><a href="mailto:{{ item['email'] }}"> {{ item['email'] }} </a></td>
+			<td>{{ item['Phone'] }}</td>
+			<td>{{ item['score'] }}</td>
+      <td>{{ item['skills'] }}</td>
+			<td><a href="{{ url_for('view_cv', filename=item['cv link']) }}" target="_blank">View</a> | <a href="{{ url_for('download_cv', filename=item['cv link']) }}">Download</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+</body>
+</html>
+  

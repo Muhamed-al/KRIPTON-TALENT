@@ -1,0 +1,117 @@
+{
+    "sourcesOfHire": [{
+            "label": "job board",
+            "value": "JOB_BOARD"
+        },
+        {
+            "label": "direct contact",
+            "value": "DIRECT_CONTACT"
+        },
+        {
+            "label": "recommendation",
+            "value": "RECOMMENDATION"
+        },
+        {
+            "label": "collaborator",
+            "value": "COLLABORATOR"
+        }
+    ],
+    "typesOfDegrees": [{
+            "label": "bachelor",
+            "value": "BACHELOR"
+        },
+        {
+            "label": "master",
+            "value": "MASTER"
+        },
+        {
+            "label": "doctorate",
+            "value": "DOCTORATE"
+        },
+        {
+            "label": "engineering",
+            "value": "ENGINEER"
+        }
+    ],
+    "jobEmploymentTypes": [{
+            "label": "Full time",
+            "value": "FULL_TIME"
+        },
+        {
+            "label": "Part time",
+            "value": "PART_TIME"
+        },
+        {
+            "label": "Contract ( mission )",
+            "value": "CONTRACT"
+        },
+        {
+            "label": "Temporary / Freelance",
+            "value": "TEMPORARY"
+        }
+    ],
+    "currentJobStatus": [{
+            "label": "Open opportunity",
+            "value": "OPEN"
+        },
+        {
+            "label": "Closed opportunity",
+            "value": "CLOSED"
+        },
+        {
+            "label": "Filled",
+            "value": "FILLED"
+        }
+    ],
+    "requiredJobExperienceLevel": [{
+            "label": "Entry level / Freshly graduated ",
+            "value": "ENTRY_LEVEL"
+        },
+        {
+            "label": "Mid level / Junior",
+            "value": "MID_LEVEL"
+        },
+        {
+            "label": "Senior / Experienced",
+            "value": "SENIOR"
+        }
+    ],
+    "hiringDecisions": [{
+            "label": "Hired",
+            "value": "HIRED"
+        },
+        {
+            "label": "Not Hired",
+            "value": "NOT_HIRED"
+        },
+        {
+            "label": "Wait list",
+            "value": "WAIT_LIST"
+        },
+        {
+            "label": "Pending",
+            "value": "PENDING"
+        },
+        {
+            "label": "Placed",
+            "value": "PLACED"
+        }
+    ],
+    "recruitingStatus": [{
+            "label": "Resume reviewing",
+            "value": "RESUME_REVIEW"
+        },
+        {
+            "label": "Screening phase",
+            "value": "SCREENING"
+        },
+        {
+            "label": "Interviewing phase",
+            "value": "IN_PERSON_INTERVIEW"
+        },
+        {
+            "label": "Offer",
+            "value": "OFFER"
+        }
+    ]
+}

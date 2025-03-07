@@ -1,0 +1,93 @@
+pipeline {
+  agent any
+  environment {
+    dockerCredentials = credentials('dockerhub')
+  }
+  stages {
+    stage('gitlab') {
+      steps {
+        git branch: 'dev', credentialsId: 'gitlab-creds', url: 'https://gitlab.com/AlaaBenFradj/kripton-talent.git'
+
+      }
+    }
+    stage('prep') {
+      steps {
+        bat 'docker-compose up -d keycloak broker'
+        powershell ''
+        '
+        cd configuration - service
+          . / mvnw clean package ''
+        '
+        bat ''
+        '
+        docker - compose up - d configuration - service ''
+        '
+      }
+    }
+    stage('clean_package') {
+      steps {
+        script {
+          def modules = ['candidate-service', 'job-service', 'qualification-service', 'communication-service', 'user-service', 'api-gateway-service', 'registry-service']
+          for (module in modules) {
+            dir(module) {
+              bat ''
+              '
+              . / mvnw clean test
+
+                ''
+              '
+            }
+          }
+        }
+        bat ' docker-compose stop configuration-service '
+      }
+    }
+    stage('package_build_push') {
+      steps {
+        script {
+          def modules = ['candidate-service', 'job-service', 'qualification-service', 'communication-service', 'user-service', 'api-gateway-service', 'registry-service']
+          for (module in modules) {
+            dir(module) {
+              bat ''
+              '
+              . / mvnw package - Dmaven.test.skip ''
+              '
+            }
+          }
+        }
+      }
+    }
+    stage('sonar') {
+      steps {
+        withSonarQubeEnv(credentialsId: 'sonarCreds', installationName: 'sonar') {
+          bat 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
+        }
+      }
+    }
+    stage('nexus') {
+      steps {
+        powershell ' echo nexus .. '
+      }
+    }
+
+    stage('run') {
+      steps {
+        powershell 'docker-compose up -d'
+      }
+    }
+
+    stage('notify') {
+      steps {
+        echo 'Notify GitLab'
+        updateGitlabCommitStatus name: 'build', state: 'pending'
+        updateGitlabCommitStatus name: 'build', state: 'success'
+      }
+    }
+  }
+}
+
+updateGitlabCommitStatus name: 'build', state: 'success'
+}
+}
+}
+}

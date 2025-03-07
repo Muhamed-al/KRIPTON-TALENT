@@ -1,0 +1,229 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  [title]="listViewSelected ? 'List View' : 'Grid View'"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row g-4 mb-4">
+          <div class="col-sm d-flex">
+            <div class="btn-group" ngbDropdown>
+              <button
+                type="button"
+                class="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                ngbDropdownToggle
+              >
+                Create Candidates
+              </button>
+              <div class="dropdown-menu dropdownmenu-primary" ngbDropdownMenu>
+                <a
+                  class="dropdown-item"
+                  href="javascript:void(0);"
+                  routerLink="create-candidate"
+                  >Manually</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="javascript:void(0);"
+                  (click)="openModal(uploadFromResumeModal)"
+                  >Import Resume</a
+                >
+
+                <a
+                  class="dropdown-item"
+                  href="javascript:void(0);"
+                  (click)="openModal(importModal)"
+                  >Import Excel</a
+                >
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0);"
+                  >Use Template</a
+                >
+              </div>
+            </div>
+            <button
+              class="ms-md-2 flex-shrink-0 mb-3 mb-md-0 btn btn-primary ms-2 ms-auto ms-md-2"
+              (click)="toggleView()"
+            >
+              <i
+                [ngClass]="
+                  listViewSelected ? 'ri-apps-2-line' : ' ri-menu-5-line'
+                "
+                class="align-bottom me-1"
+              ></i>
+            </button>
+          </div>
+
+          <div class="col-sm-auto">
+            <div class="d-md-flex justify-content-sm-end gap-2">
+              <div class="search-box ms-md-2 flex-shrink-0 mb-3 mb-md-0">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="searchJob"
+                  autocomplete="on"
+                  placeholder="Search for candidates ..."
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="searchForCandidates()"
+                />
+                <i class="ri-search-line search-icon"></i>
+              </div>
+
+              <select
+                class="form-control w-md choices__inner"
+                data-choices
+                data-choices-search-false
+                [(ngModel)]="sortBySelect"
+                (change)="sortChanged()"
+              >
+                <option value="firstName">Name</option>
+                <option value="createdAt" selected>Newest</option>
+                <option value="modifiedAt">Last modified</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="listViewSelected">
+  <app-candidate-list
+    (updateCandidateListEvent)="getCandidates(sortBySelect)"
+    [candidateList]="candidateList"
+  ></app-candidate-list>
+</div>
+<div class="row" *ngIf="!listViewSelected">
+  <app-candidate-grid
+    (updateCandidateListEvent)="getCandidates(sortBySelect)"
+    [candidateList]="candidateList"
+  ></app-candidate-grid>
+  <div
+    class="py-4 mt-4 text-center"
+    id="noresult"
+    *ngIf="!candidateList?.length"
+  >
+    <lord-icon
+      src="https://cdn.lordicon.com/msoeawqm.json"
+      trigger="loop"
+      colors="primary:#405189,secondary:#0ab39c"
+      style="width: 72px; height: 72px"
+    ></lord-icon>
+    <h5 class="mt-4">Sorry! No Result Found</h5>
+  </div>
+</div>
+
+<!-- MODALS -->
+<ng-template #importModal let-modal>
+  <div class="modal-body text-center">
+    <div class="mt-2">
+      <div class="mb-4 text-center">
+        <div>
+          <h5 class="mb-1">Import from CSV</h5>
+          <p class="text-muted">This may take some time</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row gy-4 mb-3">
+          <div class="text-center">
+            <div>
+              <label for="formFileSm">Upload</label>
+              <input
+                class="form-control form-control-lg"
+                id="formFileSm"
+                type="file"
+                (change)="onCsvFileChange($event)"
+                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hstack gap-2 justify-content-center">
+        <button
+          class="btn btn-soft-danger"
+          data-toast
+          data-toast-text="Uploading"
+          data-toast-gravity="top"
+          data-toast-position="right"
+          data-toast-className="primary"
+          data-toast-duration="3000"
+          data-toast-close="close"
+          data-toast-style="style"
+          class="btn btn-light w-xs"
+          (click)="uploadBatch()"
+          (click)="modal.close('Close click')"
+        >
+          import
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #uploadFromResumeModal let-modal>
+  <div class="modal-body text-center">
+    <div class="mt-2">
+      <div class="mb-4 text-center">
+        <div>
+          <h5 class="mb-1">Import from Resume</h5>
+          <p class="text-muted">This may take some time</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row gy-4 mb-3">
+          <div class="text-center">
+            <div>
+              <label for="formFileSm">Upload</label>
+              <input
+                *ngIf="!submitted; else loader"
+                class="form-control form-control-lg"
+                id="formFileSm"
+                type="file"
+                (change)="onUploadResumeChange($event)"
+                accept=".pdf , .docx , .doc , .txt "
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hstack gap-2 justify-content-center">
+        <button
+          class="btn btn-soft-danger"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="uploadResume()"
+        >
+          import
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template id="elmLoader" #loader>
+  <div class="spinner-border text-primary avatar-sm" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-template>

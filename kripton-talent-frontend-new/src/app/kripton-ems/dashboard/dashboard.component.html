@@ -1,0 +1,688 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-height-100">
+      <div class="d-flex">
+        <div class="flex-grow-1 p-3">
+          <h5 class="mb-3">Application</h5>
+          <p class="mb-0 text-muted fs-13">
+            <span class="badge bg-light text-success mb-0">
+              <i class="ri-arrow-up-line align-middle"></i> 16.24 %
+            </span>
+            vs. previous month
+          </p>
+        </div>
+        <div>
+          <div
+            class="apex-charts"
+            data-colors='["--vz-success" , "--vz-transparent"]'
+            dir="ltr"
+            id="results_sparkline_charts3"
+          >
+            <apx-chart
+              [series]="ApplicationChart.series"
+              [chart]="ApplicationChart.chart"
+              [dataLabels]="ApplicationChart.dataLabels"
+              [stroke]="ApplicationChart.stroke"
+              [fill]="ApplicationChart.fill"
+              [colors]="ApplicationChart.colors"
+              dir="ltr"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end col-->
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-height-100">
+      <div class="d-flex">
+        <div class="flex-grow-1 p-3">
+          <h5 class="mb-3">Interviewed</h5>
+          <p class="mb-0 text-muted fs-13">
+            <span class="badge bg-light text-success mb-0">
+              <i class="ri-arrow-up-line align-middle"></i> 34.24 %
+            </span>
+            vs. previous month
+          </p>
+        </div>
+        <div>
+          <div
+            class="apex-charts"
+            data-colors='["--vz-success" , "--vz-transparent"]'
+            dir="ltr"
+            id="results_sparkline_charts4"
+          >
+            <apx-chart
+              [series]="InterviewedChart.series"
+              [chart]="InterviewedChart.chart"
+              [dataLabels]="InterviewedChart.dataLabels"
+              [stroke]="InterviewedChart.stroke"
+              [fill]="InterviewedChart.fill"
+              [colors]="InterviewedChart.colors"
+              dir="ltr"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end col-->
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-height-100">
+      <div class="d-flex">
+        <div class="flex-grow-1 p-3">
+          <h5 class="mb-3">Hired</h5>
+          <p class="mb-0 text-muted fs-13">
+            <span class="badge bg-light text-success mb-0">
+              <i class="ri-arrow-up-line align-middle"></i> 6.67 %
+            </span>
+            vs. previous month
+          </p>
+        </div>
+        <div>
+          <div
+            class="apex-charts"
+            data-colors='["--vz-success" , "--vz-transparent"]'
+            dir="ltr"
+            id="results_sparkline_charts"
+          >
+            <apx-chart
+              [series]="HiredChart.series"
+              [chart]="HiredChart.chart"
+              [dataLabels]="HiredChart.dataLabels"
+              [stroke]="HiredChart.stroke"
+              [fill]="HiredChart.fill"
+              [colors]="HiredChart.colors"
+              dir="ltr"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end col-->
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-height-100">
+      <div class="d-flex">
+        <div class="flex-grow-1 p-3">
+          <h5 class="mb-3">Rejected</h5>
+          <p class="mb-0 text-muted">
+            <span class="badge bg-light text-danger mb-0">
+              <i class="ri-arrow-down-line align-middle"></i> 3.24 %
+            </span>
+            vs. previous month
+          </p>
+        </div>
+        <div>
+          <div
+            class="apex-charts"
+            data-colors='["--vz-danger", "--vz-transparent"]'
+            dir="ltr"
+            id="results_sparkline_charts2"
+          >
+            <apx-chart
+              [series]="RejectedChart.series"
+              [chart]="RejectedChart.chart"
+              [dataLabels]="RejectedChart.dataLabels"
+              [stroke]="RejectedChart.stroke"
+              [fill]="RejectedChart.fill"
+              [colors]="RejectedChart.colors"
+              dir="ltr"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end col-->
+</div>
+<!-- End Breadcrumbs -->
+<div class="row">
+  <div class="col-xl-6">
+    <div class="card card-height-100">
+      <div class="card-header border-0 align-items-center d-flex">
+        <h4 class="card-title mb-0 flex-grow-1">Applications Statistic</h4>
+        <div class="hstack gap-1">
+          <button type="button" class="btn btn-soft-secondary btn-sm">
+            ALL
+          </button>
+          <button type="button" class="btn btn-soft-secondary btn-sm">
+            1M
+          </button>
+          <button type="button" class="btn btn-soft-secondary btn-sm">
+            6M
+          </button>
+          <button type="button" class="btn btn-soft-primary btn-sm">1Y</button>
+        </div>
+      </div>
+      <!-- end card header -->
+
+      <div class="card-header p-0 border-0 bg-soft-light">
+        <div class="row g-0 text-center">
+          <div class="col-6 col-sm-3">
+            <div class="p-3 border border-dashed border-start-0">
+              <h5 class="mb-1">
+                <span
+                  [CountTo]="jobStats?.allJobs"
+                  class="counter-value"
+                  [from]="0"
+                  [duration]="1"
+                ></span>
+              </h5>
+              <p class="text-muted mb-0">Jobs</p>
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-6 col-sm-3">
+            <div class="p-3 border border-dashed border-start-0">
+              <h5 class="mb-1">
+                <span
+                  [CountTo]="jobStats?.entryJobs"
+                  class="counter-value"
+                  [from]="0"
+                  [duration]="1"
+                ></span>
+              </h5>
+              <p class="text-muted mb-0">Entry Level</p>
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-6 col-sm-3">
+            <div class="p-3 border border-dashed border-start-0">
+              <h5 class="mb-1">
+                <span
+                  [CountTo]="jobStats?.openJobs"
+                  class="counter-value"
+                  [from]="0"
+                  [duration]="1"
+                ></span>
+              </h5>
+              <p class="text-muted mb-0">Open Jobs</p>
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-6 col-sm-3">
+            <div class="p-3 border border-dashed border-start-0 border-end-0">
+              <h5 class="mb-1 text-success">
+                <span
+                  [CountTo]="jobStats?.allJobApps"
+                  class="counter-value"
+                  [from]="0"
+                  [duration]="1"
+                ></span>
+              </h5>
+              <p class="text-muted mb-0">Applications</p>
+            </div>
+          </div>
+          <!--end col-->
+        </div>
+      </div>
+      <!-- end card header -->
+
+      <div class="card-body p-0 pb-2">
+        <div class="w-100">
+          <div
+            id="line_chart_dashed"
+            data-colors='["--vz-success", "--vz-info", "--vz-primary"]'
+            class="apex-charts"
+            dir="ltr"
+          >
+            <apx-chart
+              [series]="dashedLineChart?.series"
+              [chart]="dashedLineChart?.chart"
+              [colors]="dashedLineChart?.colors"
+              [dataLabels]="dashedLineChart?.dataLabels"
+              [stroke]="dashedLineChart?.stroke"
+              [series]="dashedLineChart?.series"
+              [title]="dashedLineChart?.title"
+              [markers]="dashedLineChart?.markers"
+              [xaxis]="dashedLineChart?.xaxis"
+              [tooltip]="dashedLineChart?.tooltip"
+              [grid]="dashedLineChart?.grid"
+              dir="ltr"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card -->
+  </div>
+
+  <div class="col-xl-6">
+    <div class="d-flex flex-column h-100">
+      <div class="row">
+        <div class="col-xl-12 col-md-6">
+          <div class="card card-animate overflow-hidden">
+            <div class="position-absolute start-0" style="z-index: 0">
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <style>
+                  .s0 {
+                    opacity: 0.05;
+                    fill: var(--vz-success);
+                  }
+                </style>
+                <path
+                  id="Shape 8"
+                  class="s0"
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
+            </div>
+            <div class="card-body" style="z-index: 1">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1 overflow-hidden">
+                  <p
+                    class="text-uppercase fw-medium text-muted text-truncate mb-3"
+                  >
+                    Closed Jobs
+                  </p>
+                  <h4 class="fs-22 fw-semibold ff-primary mb-0">
+                    <span
+                      [CountTo]="jobStats?.closedJobs"
+                      class="counter-value"
+                      [from]="0"
+                      [duration]="1"
+                    ></span>
+                  </h4>
+                </div>
+                <div class="flex-shrink-0">
+                  <div id="total_jobs" class="apex-charts" dir="ltr">
+                    <apx-chart
+                      [series]="closedJobsChart?.series"
+                      [chart]="closedJobsChart?.chart"
+                      [dataLabels]="closedJobsChart?.dataLabels"
+                      [plotOptions]="closedJobsChart?.plotOptions"
+                      [colors]="closedJobsChart?.colors"
+                    >
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+        <!--end col-->
+        <div class="col-xl-12 col-md-6">
+          <!-- card -->
+          <div class="card card-animate overflow-hidden">
+            <div class="position-absolute start-0" style="z-index: 0">
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <style>
+                  .s0 {
+                    opacity: 0.05;
+                    fill: var(--vz-success);
+                  }
+                </style>
+                <path
+                  id="Shape 8"
+                  class="s0"
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
+            </div>
+            <div class="card-body" style="z-index: 1">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1 overflow-hidden">
+                  <p
+                    class="text-uppercase fw-medium text-muted text-truncate mb-3"
+                  >
+                    Open Jobs
+                  </p>
+                  <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                    <span
+                      [CountTo]="jobStats?.openJobs"
+                      class="counter-value"
+                      [from]="0"
+                      [duration]="1"
+                    ></span>
+                  </h4>
+                </div>
+                <div class="flex-shrink-0">
+                  <div
+                    id="apply_jobs"
+                    data-colors='["--vz-primary"]'
+                    class="apex-charts"
+                    dir="ltr"
+                  >
+                    <apx-chart
+                      [series]="openJobsChart?.series"
+                      [chart]="openJobsChart?.chart"
+                      [plotOptions]="openJobsChart?.plotOptions"
+                      [labels]="openJobsChart?.labels"
+                      [colors]="openJobsChart?.colors"
+                    >
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+        <!-- end col -->
+        <div class="col-xl-12 col-md-6">
+          <!-- card -->
+          <div class="card card-animate overflow-hidden">
+            <div class="position-absolute start-0" style="z-index: 0">
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <style>
+                  .s0 {
+                    opacity: 0.05;
+                    fill: var(--vz-success);
+                  }
+                </style>
+                <path
+                  id="Shape 8"
+                  class="s0"
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
+            </div>
+            <div class="card-body" style="z-index: 1">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1 overflow-hidden">
+                  <p
+                    class="text-uppercase fw-medium text-muted text-truncate mb-3"
+                  >
+                    Part-Time Jobs
+                  </p>
+                  <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                    <span
+                      [CountTo]="jobStats?.partTimeJobs"
+                      class="counter-value"
+                      [from]="0"
+                      [duration]="1"
+                    ></span>
+                  </h4>
+                </div>
+                <div class="flex-shrink-0">
+                  <div
+                    id="new_jobs_chart"
+                    data-colors='["--vz-success"]'
+                    class="apex-charts"
+                    dir="ltr"
+                  >
+                    <apx-chart
+                      [series]="partTimeJobsChart?.series"
+                      [chart]="partTimeJobsChart?.chart"
+                      [plotOptions]="partTimeJobsChart?.plotOptions"
+                      [labels]="partTimeJobsChart?.labels"
+                      [colors]="partTimeJobsChart?.colors"
+                    >
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+
+        <!--end col-->
+        <div class="col-xl-12 col-md-6">
+          <!-- card -->
+          <div class="card card-animate overflow-hidden">
+            <div class="position-absolute start-0" style="z-index: 0">
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <style>
+                  .s0 {
+                    opacity: 0.05;
+                    fill: var(--vz-success);
+                  }
+                </style>
+                <path
+                  id="Shape 8"
+                  class="s0"
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
+            </div>
+            <div class="card-body" style="z-index: 1">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1 overflow-hidden">
+                  <p
+                    class="text-uppercase fw-medium text-muted text-truncate mb-3"
+                  >
+                    Freelance Jobs
+                  </p>
+                  <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                    <span
+                      [CountTo]="jobStats?.temporaryJobs"
+                      class="counter-value"
+                      [from]="0"
+                      [duration]="1"
+                    ></span>
+                  </h4>
+                </div>
+                <div class="flex-shrink-0">
+                  <div id="rejected_chart" class="apex-charts" dir="ltr">
+                    <apx-chart
+                      [series]="freelanceJobsChart?.series"
+                      [chart]="freelanceJobsChart?.chart"
+                      [plotOptions]="freelanceJobsChart?.plotOptions"
+                      [labels]="freelanceJobsChart?.labels"
+                      [colors]="freelanceJobsChart?.colors"
+                    >
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+
+        <!-- end col -->
+      </div>
+      <!--end row-->
+    </div>
+  </div>
+
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row">
+  <div class="col-xxl-7 col-md-7">
+    <div class="card card-height-100">
+      <div class="card-header align-items-center d-flex">
+        <h4 class="card-title mb-0 flex-grow-1">Jobs Summary</h4>
+        <div class="flex-shrink-0">
+          <h4 class="card-title mb-0 flex-grow-1">Candidates Summary</h4>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-lg-6">
+          <div class="card-body align-items-center d-flex">
+            <canvas
+              baseChart
+              [datasets]="polarChart1?.datasets"
+              [type]="'polarArea'"
+              [options]="polarChart1?.options"
+              height="100"
+              [labels]="polarChart1?.labels"
+            ></canvas>
+            <canvas
+              baseChart
+              [datasets]="polarChart2?.datasets"
+              [type]="'polarArea'"
+              [options]="polarChart2?.options"
+              height="100"
+              [labels]="polarChart2?.labels"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+
+    <!-- end col -->
+  </div>
+  <div class="col-xxl-5 col-md-5">
+    <div class="card card-height-100">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <h6 class="card-title mb-0 flex-grow-1">Popular Candidates</h6>
+          <div class="flex-shrink-0">
+            <a routerLink="/ems/candidates" class="link-primary"
+              >View All <i class="ri-arrow-right-line"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-lg-6">
+          <div class="card-body border-end">
+            <div class="search-box">
+              <input
+                type="text"
+                class="form-control bg-light border-light"
+                autocomplete="off"
+                id="searchList"
+                [(ngModel)]="searchCandidateTerm"
+                (ngModelChange)="searchForCandidate()"
+                placeholder="Search candidate..."
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+
+            <ngx-simplebar
+              data-simplebar
+              style="max-height: 210px"
+              class="px-3 mx-n3"
+            >
+              <ul class="list-unstyled mb-0 pt-2" id="candidate-list">
+                <li
+                  *ngFor="let candidate of candidatelist; let i = index"
+                  (click)="opendetail(candidate)"
+                >
+                  <a
+                    href="javascript:void(0);"
+                    class="d-flex align-items-center py-2"
+                  >
+                    <div class="flex-shrink-0 me-2">
+                      <div class="avatar-xs">
+                        <img
+                          [src]="
+                            candidate?.imagePath == null || undefined
+                              ? 'assets/images/users/user-dummy-img.jpg'
+                              : candidate?.imagePath
+                          "
+                          alt=""
+                          class="img-fluid rounded candidate-img"
+                        />
+                      </div>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h5 class="fs-13 mb-1 text-truncate">
+                        <span class="candidate-name">{{
+                          candidate.firstName
+                        }}</span>
+                        <span class="text-muted fw-normal">
+                          @{{ candidate.email }}</span
+                        >
+                      </h5>
+                      <div class="d-none candidate-position">
+                        {{ candidate.designation }}
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </ngx-simplebar>
+          </div>
+        </div>
+        <div *ngIf="candidatedetail" class="col-lg-6">
+          <div class="card-body text-center">
+            <div class="avatar-md mx-auto">
+              <img
+                [src]="
+                  candidatedetail?.imagePath == null || undefined
+                    ? 'assets/images/users/user-dummy-img.jpg'
+                    : candidatedetail?.imagePath
+                "
+                alt=""
+                id="candidate-img"
+                class="img-thumbnail rounded-circle shadow-none"
+              />
+            </div>
+
+            <h5 id="candidate-name" class="mb-1">
+              {{ candidatedetail.firstName }}
+            </h5>
+            <h5 id="candidate-name" class="mb-1">
+              {{ candidatedetail.lastName }}
+            </h5>
+            <hr />
+
+            <h6 id="candidate-name" class="mb-1 text-muted">
+              {{ candidatedetail.phone }}
+            </h6>
+            <hr />
+            <span class="mb-2 badge badge-gradient-primary">
+              {{ candidatedetail.country }}
+            </span>
+            <p id="candidate-position" class="text-muted">
+              {{ candidatedetail.designation }}
+            </p>
+
+            <div class="d-flex gap-2 justify-content-center mb-3">
+              <a
+                href="javascript:void(0);"
+                *ngIf="!candidatedetail?.completed"
+                class="btn btn-soft-warning btn-sm"
+                (click)="sendCompletionMail(candidatedetail)"
+                >Send Completion email
+                <i class="ri-mail-line align-bottom ms-2"></i
+              ></a>
+              <a
+                href="javascript:void(0);"
+                class="btn btn-soft-primary btn-sm"
+                [routerLink]="[
+                  '/ems/candidates/candidate-overview',
+                  candidatedetail.id
+                ]"
+                >Overview <i class="ri-arrow-right-line align-bottom ms-2"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>

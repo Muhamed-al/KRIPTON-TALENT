@@ -1,0 +1,385 @@
+<app-breadcrumbs [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row g-4 mb-4">
+          <div class="col-sm d-flex">
+            <button
+              class="ms-md-2 flex-shrink-0 mb-3 mb-md-0 btn btn-primary ms-2 ms-auto ms-md-2"
+              (click)="toggleView()"
+              [innerText]="
+                candidateRecSelected ? 'Recommend Jobs' : 'Recommend Candidates'
+              "
+            ></button>
+          </div>
+          <div class="col-sm" *ngIf="candidateRecSelected">
+            <ng-select
+              placeholder="Select a Job First .."
+              [(ngModel)]="selectedJob"
+              (ngModelChange)="jobSelectChange()"
+            >
+              <ng-option *ngFor="let job of jobList" [value]="job.id">
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="javascript:void(0);"
+                >
+                  <div class="avatar-xxs flex-shrink-0 me-2">
+                    <img
+                      [src]="
+                        job?.imagePath
+                          ? job?.imagePath
+                          : 'assets/images/users/user-dummy-img.jpg'
+                      "
+                      alt=""
+                      class="img-fluid rounded-circle"
+                    />
+                  </div>
+                  <div class="flex-grow-1">
+                    {{ job?.title
+                    }}<span
+                      class="ms-2 me-2"
+                      [innerText]="
+                        job?.status === 'OPEN' ? 'Open' : 'Closed or filled'
+                      "
+                      [ngClass]="
+                        job?.status === 'OPEN'
+                          ? 'ms-2 badge bg-success'
+                          : 'ms-2 badge bg-danger'
+                      "
+                    ></span>
+                  </div>
+                </a> </ng-option
+            ></ng-select>
+          </div>
+          <div class="col-sm" *ngIf="!candidateRecSelected">
+            <ng-select
+              placeholder="Select a Candidate First .."
+              [(ngModel)]="selectedCandidate"
+              (ngModelChange)="candidateSelectChange()"
+            >
+              <ng-option
+                *ngFor="let candidate of candidateList"
+                [value]="candidate.id"
+              >
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="javascript:void(0);"
+                >
+                  <div class="avatar-xxs flex-shrink-0 me-2">
+                    <img
+                      [src]="
+                        candidate?.imagePath
+                          ? candidate?.imagePath
+                          : 'assets/images/users/user-dummy-img.jpg'
+                      "
+                      alt=""
+                      class="img-fluid rounded-circle"
+                    />
+                  </div>
+                  <div class="flex-grow-1">
+                    {{ candidate?.email
+                    }}<span
+                      class="ms-1 me-1"
+                      [innerText]="
+                        candidate?.decision === 'HIRED' ? 'Hired' : 'Not Hired'
+                      "
+                      [ngClass]="
+                        candidate?.decision === 'HIRED'
+                          ? 'ms-2 badge bg-success'
+                          : 'ms-2 badge bg-danger'
+                      "
+                    ></span>
+                    <span class="text-muted ms-1">{{
+                      candidate?.designation
+                    }}</span>
+                  </div>
+                </a>
+              </ng-option>
+            </ng-select>
+          </div>
+
+          <div class="col-sm-auto">
+            <div
+              class="d-md-flex justify-content-sm-end gap-2"
+              *ngIf="candidateRecSelected"
+            >
+              <div class="search-box ms-md-2 flex-shrink-0 mb-3 mb-md-0">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="searchJob"
+                  autocomplete="on"
+                  placeholder="Search for candidates ..."
+                  [(ngModel)]="searchTermCandidates"
+                  (ngModelChange)="searchForCandidates()"
+                />
+                <i class="ri-search-line search-icon"></i>
+              </div>
+
+              <select
+                class="form-control w-md choices__inner"
+                data-choices
+                data-choices-search-false
+                [(ngModel)]="sortBySelectCandidates"
+                (change)="sortChanged()"
+              >
+                <option value="firstName">Name</option>
+                <option value="createdAt" selected>Newest</option>
+                <option value="modifiedAt">Last modified</option>
+              </select>
+            </div>
+            <div
+              class="d-md-flex justify-content-sm-end gap-2"
+              *ngIf="!candidateRecSelected"
+            >
+              <div class="search-box ms-md-2 flex-shrink-0 mb-3 mb-md-0">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="searchJob"
+                  autocomplete="on"
+                  placeholder="Search for jobs ..."
+                  [(ngModel)]="searchTermJobs"
+                  (ngModelChange)="searchForJobs()"
+                />
+                <i class="ri-search-line search-icon"></i>
+              </div>
+
+              <select
+                class="form-control w-md choices__inner"
+                data-choices
+                data-choices-search-false
+                [(ngModel)]="sortBySelectJobs"
+                (change)="sortJobChanged()"
+              >
+                <option value="firstName">Name</option>
+                <option value="createdAt" selected>Newest</option>
+                <option value="modifiedAt">Last modified</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="candidateRecSelected">
+  <div class="col-xl-12">
+    <div class="card">
+      <div class="card-header align-items-center d-flex">
+        <h4
+          class="card-title mb-0 flex-grow-1"
+          [innerText]="candidateRecSelected ? 'Top Candidates' : 'Top Jobs'"
+        ></h4>
+
+        <div class="flex-shrink-0">
+          <div class="form-check form-switch form-switch-right form-switch-md">
+            <label for="card-tables-showcode" class="form-label text-muted"
+              >Number of Recommendations</label
+            >
+            <input
+              class="form-control"
+              type="number"
+              [(ngModel)]="numberOfRecs"
+              (ngModelChange)="numberOfRecsChange()"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- end card header -->
+
+      <div class="card-body">
+        <div class="live-preview">
+          <div class="table-responsive table-card">
+            <table class="table align-middle table-nowrap mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col" style="width: 46px">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="cardtableCheck"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="cardtableCheck"
+                      ></label>
+                    </div>
+                  </th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Designation</th>
+                  <th scope="col">Score</th>
+                  <th scope="col" style="width: 150px">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let candidate of recommendedCandidates">
+                  <td>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="cardtableCheck01"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="cardtableCheck01"
+                      ></label>
+                    </div>
+                  </td>
+                  <td>
+                    <a href="javascript:void(0);" class="fw-medium"
+                      >#{{ candidate?.id }}</a
+                    >
+                  </td>
+                  <td>
+                    {{ candidate?.first_name }} {{ candidate?.last_name }}
+                  </td>
+                  <td>{{ candidate?.email }}</td>
+                  <td>{{ candidate?.phone }}</td>
+                  <td>
+                    <span class="badge badge-soft-primary text-uppercase">{{
+                      candidate?.designation
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-soft-success">{{
+                      candidate?.score
+                    }}</span>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-sm btn-light">
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="d-none code-view"></div>
+      </div>
+      <!-- end card-body -->
+    </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+<div class="row" *ngIf="!candidateRecSelected">
+  <div class="col-xl-12">
+    <div class="card">
+      <div class="card-header align-items-center d-flex">
+        <h4
+          class="card-title mb-0 flex-grow-1"
+          [innerText]="candidateRecSelected ? 'Top Candidates' : 'Top Jobs'"
+        ></h4>
+
+        <div class="flex-shrink-0">
+          <div class="form-check form-switch form-switch-right form-switch-md">
+            <label for="card-tables-showcode" class="form-label text-muted"
+              >Number of Recommendations</label
+            >
+            <input
+              class="form-control"
+              type="number"
+              [(ngModel)]="numberOfRecs"
+              (ngModelChange)="numberOfRecsChange()"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- end card header -->
+
+      <div class="card-body">
+        <div class="live-preview">
+          <div class="table-responsive table-card">
+            <table class="table align-middle table-nowrap mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col" style="width: 46px">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="cardtableCheck"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="cardtableCheck"
+                      ></label>
+                    </div>
+                  </th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Experience Level</th>
+                  <th scope="col">Score</th>
+                  <th scope="col" style="width: 150px">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let job of recommendedJobs">
+                  <td>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="cardtableCheck01"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="cardtableCheck01"
+                      ></label>
+                    </div>
+                  </td>
+                  <td>
+                    <a href="javascript:void(0);" class="fw-medium"
+                      >#{{ job.id }}</a
+                    >
+                  </td>
+                  <td>{{ job?.title }}</td>
+                  <td>{{ job?.company }}</td>
+                  <td>
+                    <span class="badge badge-soft-primary">{{
+                      job?.status
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-soft-primary">{{
+                      job?.experience_level
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-soft-success">{{
+                      job?.score
+                    }}</span>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-sm btn-light">
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="d-none code-view"></div>
+      </div>
+      <!-- end card-body -->
+    </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>

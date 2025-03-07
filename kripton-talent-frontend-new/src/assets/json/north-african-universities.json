@@ -1,0 +1,67 @@
+{
+    "Algeria": [
+        "University of Algiers",
+        "University of Oran",
+        "University of Constantine",
+        "University of Batna",
+        "University of Tlemcen",
+        "University of Blida",
+        "University of Djelfa",
+        "University of Guelma"
+    ],
+    "Egypt": [
+        "Cairo University",
+        "Alexandria University",
+        "Ain Shams University",
+        "American University in Cairo",
+        "The British University in Egypt",
+        "Assiut University",
+        "Mansoura University",
+        "Zagazig University",
+        "Suez Canal University",
+        "South Valley University"
+    ],
+    "Libya": [
+        "University of Tripoli",
+        "Al-Fateh University",
+        "Omar Al-Mukhtar University",
+        "Garyounis University",
+        "Misrata University",
+        "Sirte University",
+        "Zawia University",
+        "Sabha University",
+        "University of Benghazi"
+    ],
+    "Morocco": [
+        "University of Mohamed V, Rabat",
+        "Hassan II University of Casablanca",
+        "Cadi Ayyad University, Marrakech",
+        "Moulay Ismail University, Meknes",
+        "Abdelmalek Essaadi University, Tétouan",
+        "University of Hassan I, Settat",
+        "University of Ibn Tofail, Kénitra",
+        "University of Agadir",
+        "University of Sultan Moulay Slimane, Beni Mellal",
+        "University of Chouaib Doukkali, El Jadida"
+    ],
+    "Tunisia": [
+        "University of Tunis",
+        "University of Sfax",
+        "University of Monastir",
+        "University of Carthage",
+        "University of Gabes",
+        "University of Sousse",
+        "University of Jendouba",
+        "University of Kairouan",
+        "University of Gafsa", "Université Centrale",
+        "Université de Tunis",
+        "Université Libre de Tunis",
+        "Université Privée de Sousse",
+        "Université Mediterraneenne de Tunis",
+        "Institut Supérieur de Gestion de Tunis",
+        "Université Polytechnique Internationale de Tunis",
+        "Université Privée du Sud",
+        "Université Internationale de Tunis",
+        "Université Privée Ibn Khaldoun"
+    ]
+}

@@ -1,0 +1,7 @@
+
+spring:
+  application:
+    name: job-service
+    
+    
+uploadDirectory: C:/Users/MUHAMED ALOUANI/Desktop/Année universitaire 2022-2023\KRIPTON-TALENT/UPLOAD_DIR

@@ -1,0 +1,13 @@
+open cmd and run these commands :
+
+wsl -d docker-desktop -u root
+sysctl -w vm.max_map_count=262144
+
+gitlab_api_token
+
+nexu , sonar : admin muhamed
+
+
+gitlab token : Y4JuGwbYfpm4Madwj1CN    
+
+sonat-token : 19c0a097db5fd7217c635c840eb7ac5f003c2d8c

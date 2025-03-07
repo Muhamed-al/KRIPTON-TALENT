@@ -1,0 +1,6 @@
+
+spring:
+  batch:
+      initialize-schema: always
+  application:
+    name: candidate-service

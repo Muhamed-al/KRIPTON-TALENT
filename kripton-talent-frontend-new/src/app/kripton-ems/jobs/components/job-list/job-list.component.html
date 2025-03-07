@@ -1,0 +1,39 @@
+<div class="row job-list">
+  <div
+    *ngFor="
+      let job of listOfJobs | slice : (page - 1) * pageSize : page * pageSize;
+      let i = index
+    "
+    class="card joblist-card"
+  >
+    <app-job-card
+      [job]="job"
+      (jobDeletedEvent)="updateListJobs($event)"
+      (jobEditedEvent)="updateListJobs($event)"
+      (selectJobEvent)="selectJob($event)"
+    ></app-job-card>
+  </div>
+  <!-- pagination -->
+  <ngb-pagination
+    *ngIf="listOfJobs"
+    class="d-flex justify-content-end pt-2"
+    [collectionSize]="listOfJobs.length"
+    [(page)]="page"
+    [pageSize]="pageSize"
+    aria-label="Custom pagination"
+  >
+    <ng-template ngbPaginationPrevious let-page let-pages="pages">
+      <i class="ci-arrow-left me-2"></i>
+      Prev
+    </ng-template>
+    <ng-template ngbPaginationNext>
+      Next
+      <i class="ci-arrow-right ms-2"></i>
+    </ng-template>
+  </ngb-pagination>
+  <div id="elmLoader" *ngIf="!listOfJobs">
+    <div class="spinner-border text-primary avatar-sm" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

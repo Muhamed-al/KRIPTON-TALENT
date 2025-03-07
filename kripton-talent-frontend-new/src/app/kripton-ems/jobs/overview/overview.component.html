@@ -1,0 +1,357 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card mx-n4">
+      <div class="bg-soft-warning">
+        <div class="card-body px-4 pb-4">
+          <div class="row mb-3">
+            <div class="col-md">
+              <div class="row align-items-center g-3">
+                <div class="col-md-auto">
+                  <div class="avatar-md">
+                    <div class="avatar-title bg-white rounded-circle">
+                      <img
+                        [src]="
+                          !selectedJob?.imagePath
+                            ? 'assets/images/brands/slack.png'
+                            : selectedJob?.imagePath
+                        "
+                        alt=""
+                        class="avatar-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div>
+                    <h4 class="fw-bold">{{ selectedJob?.title }}</h4>
+                    <div class="hstack gap-3 flex-wrap">
+                      <div>
+                        <i class="ri-building-line align-bottom me-1"></i>
+                        {{ selectedJob?.company }}
+                      </div>
+                      <div>
+                        Starting Date :
+                        <span class="fw-medium">{{
+                          selectedJob?.startDate | date : "fullDate"
+                        }}</span>
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-map-pin-2-line align-bottom me-1"></i>
+                        {{ selectedJob?.location }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        Post Date :
+                        <span class="fw-medium">{{
+                          selectedJob?.createdAt | date : "fullDate"
+                        }}</span>
+                      </div>
+
+                      <div class="vr"></div>
+                      <div class="badge rounded-pill bg-success fs-12">
+                        {{ selectedJob?.employmentType | lowercase }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <div class="hstack gap-1 flex-wrap mt-4 mt-md-0">
+                <button
+                  type="button"
+                  class="btn btn-icon btn-sm btn-ghost-warning fs-16"
+                >
+                  <i class="ri-star-fill"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-icon btn-sm btn-ghost-primary fs-16"
+                >
+                  <i class="ri-share-line"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-icon btn-sm btn-ghost-primary fs-16"
+                >
+                  <i class="ri-flag-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+    </div>
+    <!-- end card -->
+  </div>
+  <!--end col-->
+</div>
+<div class="row mt-n5">
+  <div class="col-xxl-7">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="mb-3">Description</h3>
+
+        <p class="text-muted mb-5">
+          {{ selectedJob?.description }}
+        </p>
+
+        <div
+          *ngIf="
+            selectedJob?.requiredSkills !== null &&
+              selectedJob?.requiredSkills !== undefined;
+            else nothingPlaceHolder
+          "
+        >
+          <h3 class="mb-7">Required Skills for this Job</h3>
+          <ul class="text-muted vstack gap-2 mb-5">
+            <li *ngFor="let exp of selectedJob?.requiredSkills">
+              <h6 class="mb-0 text-muted">{{ exp }}</h6>
+            </li>
+          </ul>
+        </div>
+        <ng-template #nothingPlaceHolder
+          ><h4 class="mb-7">No Requirement Provided</h4>
+
+          <p class="text-muted mb-5">Contact admin</p></ng-template
+        >
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">
+            <h5 class="mb-0">Share this job:</h5>
+          </li>
+          <li class="list-inline-item">
+            <a href="#!" class="btn btn-icon btn-soft-info"
+              ><i class="ri-facebook-line"></i
+            ></a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#!" class="btn btn-icon btn-soft-success"
+              ><i class="ri-whatsapp-line"></i
+            ></a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#!" class="btn btn-icon btn-soft-secondary"
+              ><i class="ri-twitter-line"></i
+            ></a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#!" class="btn btn-icon btn-soft-danger"
+              ><i class="ri-mail-line"></i
+            ></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="d-flex align-items-center mb-4">
+          <div class="flex-grow-1">
+            <h5 class="mb-0">Recommended Candidates</h5>
+          </div>
+          <div class="flex-shrink-0">
+            <a routerLink="/candidates" class="btn btn-ghost-success"
+              >View All <i class="ri-arrow-right-line ms-1 align-bottom"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-xxl-6 col-md-6"
+        *ngFor="let candidate of recommendedCandidates"
+      >
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 ms-3">
+                <div class="d-flex gap-4 justify-content-between">
+                  <a
+                    [routerLink]="[
+                      '/ems/candidates/candidate-overview',
+                      candidate.id
+                    ]"
+                  >
+                    <h5 class="fs-16 mb-1">
+                      {{ candidate?.first_name + " " + candidate?.last_name }}
+                    </h5>
+                  </a>
+                  <div>
+                    <span class="badge badge-gradient-primary">{{
+                      candidate?.score
+                    }}</span>
+                  </div>
+                  <div class="flex-shrink-0">
+                    <div class="dropdown card-header-dropdown" ngbDropdown>
+                      <a
+                        class="text-reset dropdown-btn arrow-none"
+                        href="javascript:void(0);"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        ngbDropdownToggle
+                      >
+                        <span class="text-muted fs-18"
+                          ><i class="mdi mdi-dots-vertical"></i
+                        ></span>
+                      </a>
+                      <div
+                        class="dropdown-menu dropdown-menu-end"
+                        ngbDropdownMenu
+                      >
+                        <button class="dropdown-item">Assign</button>
+                        <button
+                          class="dropdown-item"
+                          (click)="deleteCandidate(candidate)"
+                        >
+                          delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-2 mt-2">
+                  <i
+                    class="las la-phone-volume text-primary me-1 align-bottom"
+                  ></i>
+                  {{ candidate?.phone }}
+                </div>
+                <div class="mb-2 mt-2">
+                  <i class="las la-at text-primary me-1 align-bottom"></i>
+                  {{ candidate?.email }}
+                </div>
+                <div class="mt-2">
+                  <i
+                    class="las la-briefcase text-primary me-1 align-bottom"
+                  ></i>
+                  {{ candidate?.designation }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xxl-5">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Job Overview</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive table-card">
+          <table class="table mb-0">
+            <tbody>
+              <tr>
+                <td class="fw-medium">Title</td>
+                <td>{{ selectedJob?.title }}</td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Company Name</td>
+                <td>{{ selectedJob?.company }}</td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Location</td>
+                <td>{{ selectedJob?.location }}</td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Time</td>
+                <td>
+                  <span class="badge badge-soft-success">{{
+                    selectedJob?.employmentType | lowercase
+                  }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Required Skills</td>
+                <td>
+                  <span
+                    class="badge badge-gradient-primary me-1"
+                    *ngFor="let skill of selectedJob?.requiredSkills"
+                    >{{ skill }}</span
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Post Date</td>
+                <td>{{ selectedJob?.createdAt | date : "fullDate" }}</td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Salary</td>
+                <td>{{ selectedJob?.proposedSalary }}</td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Experience</td>
+                <td>{{ selectedJob?.experienceLevel | lowercase }}</td>
+              </tr>
+              <tr>
+                <td class="fw-medium">Status</td>
+                <td>{{ selectedJob?.status | lowercase }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!--end table-->
+        </div>
+        <div class="mt-4 pt-2 hstack gap-2">
+          <a href="#!" class="btn btn-primary w-100">Apply Now</a>
+          <a
+            href="#!"
+            class="btn btn-soft-danger btn-icon custom-toggle flex-shrink-0"
+            data-bs-toggle="button"
+          >
+            <span class="icon-on"
+              ><i class="ri-bookmark-line align-bottom"></i
+            ></span>
+            <span class="icon-off"
+              ><i class="ri-bookmark-3-fill align-bottom"></i
+            ></span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!--end card-->
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Contact Us</h5>
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="mb-3">
+            <label for="nameInput" class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nameInput"
+              placeholder="Enter your name"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="emailInput" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="emailInput"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="messageInput" class="form-label">Message</label>
+            <textarea
+              class="form-control"
+              id="messageInput"
+              rows="3"
+              placeholder="Message"
+            ></textarea>
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--end card-->
+  </div>
+</div>
